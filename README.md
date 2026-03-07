@@ -17,7 +17,7 @@ Literatura:
 - **Kozłowski Karol, Modelowanie i sterowanie robotów**
 
 Harmonogram prac:
-1. 2.03-8.03
+1. 2.03-8.03:
 Przygotowanie repozytorium, rozpisanie stacku technologicznego oraz zapisanie harmonogramu prac.
 2. 9.03-15.03
 3. 16.03-22.03
