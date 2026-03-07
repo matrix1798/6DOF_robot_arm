@@ -14,6 +14,6 @@ Zadania do zrealizowania:
 Literatura:
 1. John J. Craig Wprowadzenie do robotyki, mechanika i sterowanie
 2. Honczarenko Jerzy, Roboty przemysłowe
-3. Kozłowski Karol, Modelowanie i sterowanie robotów
+3. #Kozłowski Karol, Modelowanie i sterowanie robotów
 
 Harmonogram prac:
