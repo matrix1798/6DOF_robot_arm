@@ -20,7 +20,10 @@ Harmonogram prac:
 1. 2.03-8.03:
 
 Przygotowanie repozytorium, rozpisanie stacku technologicznego oraz zapisanie harmonogramu prac.
+
 2. 9.03-15.03:
+
+Zapoznanie się z programem Fusion 360 i przemyślenie dynamiki robota.
 
 3. 16.03-22.03
 4. 23.03-29.03
