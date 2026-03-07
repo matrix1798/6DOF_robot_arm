@@ -15,3 +15,5 @@ Literatura:
 John J. Craig Wprowadzenie do robotyki, mechanika i sterowanie
 Honczarenko Jerzy, Roboty przemysłowe
 Kozłowski Karol, Modelowanie i sterowanie robotów
+
+Harmonogram prac:
