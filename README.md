@@ -10,3 +10,8 @@ Zadania do zrealizowania:
 5. Implementacja programowa kinematyki prostej i odwrotnej manipulatora.
 6. Implementacja programowa interpolacji liniowej i osiowej.
 7. Wykonanie testów działania robota
+
+Literatura
+John J. Craig Wprowadzenie do robotyki, mechanika i sterowanie
+Honczarenko Jerzy, Roboty przemysłowe
+Kozłowski Karol, Modelowanie i sterowanie robotów
