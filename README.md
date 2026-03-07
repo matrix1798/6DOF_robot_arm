@@ -12,8 +12,8 @@ Zadania do zrealizowania:
 7. Wykonanie testów działania robota
 
 Literatura:
-1. John J. Craig Wprowadzenie do robotyki, mechanika i sterowanie
-2. Honczarenko Jerzy, Roboty przemysłowe
-3. #Kozłowski Karol, Modelowanie i sterowanie robotów
+- John J. Craig Wprowadzenie do robotyki, mechanika i sterowanie
+- Honczarenko Jerzy, Roboty przemysłowe
+- **Kozłowski Karol, Modelowanie i sterowanie robotów**
 
 Harmonogram prac:
