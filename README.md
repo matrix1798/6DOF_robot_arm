@@ -23,7 +23,7 @@ Przygotowanie repozytorium, rozpisanie stacku technologicznego oraz zapisanie ha
 
 2. 9.03-15.03:
 
-Zapoznanie się z programem Fusion 360 i przemyślenie dynamiki robota.
+Zapoznanie się z programem Fusion 360 i przemyślenia konstrukcji robota.
 
 3. 16.03-22.03
 4. 23.03-29.03
