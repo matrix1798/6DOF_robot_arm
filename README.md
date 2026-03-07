@@ -16,6 +16,16 @@ Celem pracy jest zaprojektowanie i budowa modelu fizycznego antropomorficznego r
 - Honczarenko Jerzy, Roboty przemysłowe
 - **Kozłowski Karol, Modelowanie i sterowanie robotów**
 
+## Stack technologiczny:
+1. Harweare:
+- Komputer nadrzędny: Raspberry Pi 5 (lub 4B) – do obsługi ROS, obliczeń macierzowych i komunikacji ze światem.
+- Sterownik Real-Time: Mikrokontroler STM32 (np. NUCLEO-F446RE lub tańszy BlackPill na F401) – do obsługi protokołu serw i rygorystycznej interpolacji czasowej.
+- Elementy wykonawcze: Serwomechanizmy Serial Bus (Waveshare/Feetech ST3235 w dolnych osiach, ST3215 w górnych).
+- Elektronika dodatkowa: Moduł konwertera UART na Half-Duplex (lub własny obwód na bramkach logicznych) oraz wydajny zasilacz (np. 12V, min. 10A-15A).
+- Mechanika: Elementy z druku 3D (zalecany PETG lub ABS/ASA), łożyska kulkowe poprzeczne oraz łożysko oporowe w podstawie.
+2. Softwaer:
+3. Komunikacja:
+
 ## Harmonogram prac:
 1. 2.03-8.03:
 
