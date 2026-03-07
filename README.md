@@ -18,7 +18,8 @@ Literatura:
 
 Harmonogram prac:
 1. 2.03-8.03:
-\n Przygotowanie repozytorium, rozpisanie stacku technologicznego oraz zapisanie harmonogramu prac.
+
+Przygotowanie repozytorium, rozpisanie stacku technologicznego oraz zapisanie harmonogramu prac.
 2. 9.03-15.03:
 
 3. 16.03-22.03
