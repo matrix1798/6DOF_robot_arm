@@ -38,6 +38,8 @@ Celem pracy jest zaprojektowanie i budowa modelu fizycznego antropomorficznego r
 * **PC ↔ STM32:** UART / wirtualny port COM po USB (do komunikacji z ROS)
 * **STM32 ↔ Serwa:** UART (Single-Wire Half-Duplex) - zadawanie pozycji i odczyt danych z enkoderów
 
+## Wybrane komponenty:
+
 ## Harmonogram prac:
 1. 2.03-8.03:
 
