@@ -16,16 +16,16 @@ Celem pracy jest zaprojektowanie i budowa modelu fizycznego antropomorficznego r
 - Honczarenko Jerzy, Roboty przemysłowe
 - **Kozłowski Karol, Modelowanie i sterowanie robotów**
 
-# Stos Technologiczny
+## Stos Technologiczny
 
- 1. Warstwa Sprzętowa (Hardware)
+### 1. Warstwa Sprzętowa (Hardware)
 * **Komputer nadrzędny:** Raspberry Pi 5 (lub 4B)
 * **Sterownik Real-Time:** Mikrokontroler STM32 (np. NUCLEO-F446RE lub BlackPill F401)
 * **Elementy wykonawcze:** Serwomechanizmy magistrali szeregowej (Waveshare/Feetech ST3235 na osie dolne, ST3215 na osie górne)
 * **Elektronika dodatkowa:** Własny obwód konwertera UART na Half-Duplex (bufor/bramki logiczne), wydajny zasilacz 12V (min. 10A-15A)
 * **Mechanika:** Elementy z druku 3D (PETG/ABS/ASA), łożyska kulkowe poprzeczne, łożysko oporowe w osi bazy
 
- 2. Warstwa Oprogramowania (Software)
+### 2. Warstwa Oprogramowania (Software)
 * **Projektowanie 3D (CAD):** SolidWorks lub Autodesk Fusion
 * **System Operacyjny (RPi):** Ubuntu Linux 
 * **Framework Robotyki:** ROS 2 (np. dystrybucja Humble)
@@ -33,7 +33,7 @@ Celem pracy jest zaprojektowanie i budowa modelu fizycznego antropomorficznego r
 * **Języki programowania:** C++ / Python (ROS), C/C++ (STM32)
 * **Środowisko wbudowane:** STM32CubeIDE (z wykorzystaniem bibliotek HAL / LL)
 
-3. Warstwa Komunikacyjna (Protokoły)
+### 3. Warstwa Komunikacyjna (Protokoły)
 * **Laptop ↔ RPi:** Wi-Fi (SSH, komunikacja węzłów ROS)
 * **RPi ↔ STM32:** UART / wirtualny port COM po USB (przesyłanie wyliczonych punktów trajektorii)
 * **STM32 ↔ Serwa:** UART (Single-Wire Half-Duplex) - zadawanie pozycji i odczyt danych z enkoderów
