@@ -47,7 +47,7 @@ Przygotowanie repozytorium, rozpisanie stacku technologicznego oraz zapisanie ha
 
 2. 9.03-15.03:
 
-Zapoznanie się z programem Fusion 360 oraz analiza wybrangeo hardwearu.
+Roziwązanie równań kinematyki odwrotnej oraz przygotowanie symulacji robota.
 
 3. 16.03-22.03
 4. 23.03-29.03
