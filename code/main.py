@@ -1,5 +1,7 @@
 import numpy as np
 
+np.set_printoptions(precision=4, suppress=True)
+
 """
 Macierz Denavita-Hartenberga(DH):
 
@@ -20,7 +22,49 @@ def DHmatrix (phi_i,delta_i,lambda_i,theta_i):
               [     0        ,              0                 ,                 0             ,         1             ]
               ])
 
+theta_1 = 0
+theta_2 = np.pi
+theta_3 = 0
 
-mat_H_0_1 = DHmatrix(0,0,0,0)
+mat_rot_Z = np.array([
+    [np.cos(theta_1), -np.sin(theta_1), 0],
+    [np.sin(theta_1),  np.cos(theta_1), 0],
+    [0, 0, 1]
+])
 
-print(mat_H_0_1)
+mat_rot_Y = np.array([
+    [np.cos(theta_2),0,np.sin(theta_2)],
+    [0,1,0],
+    [-np.sin(theta_2),0,np.cos(theta_2)]
+])
+
+mat_rot_X = np.array([
+    [1,0,0],
+    [0,np.cos(theta_3),-np.sin(theta_3)],
+    [0,np.sin(theta_3),np.cos(theta_3)]
+])
+
+rotation =  mat_rot_X @ mat_rot_Y  @ mat_rot_Z
+
+print(rotation)
+
+"""
+Wyznaczanie punktuy posredniego:
+-punkt posredni musza dwie osie przecinac sie w środku czy 4 i 5
+-znać trzeba macierz rotacji względem punktu bazowgo 0
+"""
+
+Pgoal = np.array([[100],
+                  [80],
+                  [60]])
+
+L4 = 10
+L5 = 5
+
+z_vec = rotation[:,2]
+
+print(z_vec)
+
+Pmid = Pgoal.T - (L4 + L5)*z_vec
+
+print(Pmid)
