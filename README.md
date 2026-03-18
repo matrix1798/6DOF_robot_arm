@@ -63,7 +63,7 @@ Zamówienie serwa i serial bus controler oraz poprawa kinematyki odwrotnej.
 8. 20.04-26.04
 9. 27.04-3.05
 10. 4.05-10.05
-11. 11.05-17.05
+**11. 11.05-17.05**
 
 **Pierwszy milestone:**
 
