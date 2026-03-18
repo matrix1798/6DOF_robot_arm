@@ -42,13 +42,21 @@ Celem pracy jest zaprojektowanie i budowa modelu fizycznego antropomorficznego r
 
 ## Harmonogram prac:
 1. 2.03-8.03:
+
 Przygotowanie repozytorium, rozpisanie stacku technologicznego oraz zapisanie harmonogramu prac.
+
 2. 9.03-15.03:
+
 Roziwązanie równań kinematyki odwrotnej oraz przygotowanie symulacji robota.
+
 3. 16.03-22.03
+
 Poprawa algorytmu kinematyki odwrotnej, wybranie konkretnego hardwareu.
+
 4. 23.03-29.03
+
 Zamówienie serwa i serial bus controler oraz poprawa kinematyki odwrotnej.
+
 5. 30.03-5.04
 6. 6.04-12.04
 7. 13.04-19.04
@@ -56,7 +64,9 @@ Zamówienie serwa i serial bus controler oraz poprawa kinematyki odwrotnej.
 9. 27.04-3.05
 10. 4.05-10.05
 11. 11.05-17.05
-**Pierwszy milestone:
+
+**Pierwszy milestone:**
+
 12. 18.05-24.05
 13. 25.05-31.05
 14. 1.06-7.06
