@@ -58,14 +58,17 @@ Poprawa algorytmu kinematyki odwrotnej, wybranie konkretnego hardwareu.
 Zamówienie serwa i serial bus controler oraz poprawa kinematyki odwrotnej.
 
 5. 30.03-5.04
+
+Przygotowanie schematu kinematyki robota, sformułowanie równań kinematyki odwrotnej oraz przedstawnie wyników promotorowi.
+
 6. 6.04-12.04
 7. 13.04-19.04
 8. 20.04-26.04
 9. 27.04-3.05
 10. 4.05-10.05
-**11. 11.05-17.05**
+11. 11.05-17.05
 
-**Pierwszy milestone:**
+**Pierwszy milestone:** Zamodelowanie połowy robota
 
 12. 18.05-24.05
 13. 25.05-31.05
