@@ -55,7 +55,7 @@ Poprawa algorytmu kinematyki odwrotnej, wybranie konkretnego hardwareu.
 
 4. 23.03-29.03
 
-Zamówienie serwa i serial bus controler oraz przeprowadzenie testów kinematyki odwrotnej.
+Zamówienie serwa i serial bus controler oraz sprawdzenie poprawności działania. Przeprowadzenie testów kinematyki odwrotnej.
 
 5. 30.03-5.04
 
