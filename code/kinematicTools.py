@@ -98,3 +98,16 @@ def inverseKinematic(X,Y,Z,roll,pitch,yaw):
         print(f'Phi_5 = {np.degrees(phi_5)}')
 
         return phi_0, phi_1, phi_2, phi_3, phi_4, phi_5
+
+
+def axial_interpolation(start_phi,stop_phi,accuracy):
+
+        phi_list = []
+
+        for i in range(len(start_phi)):
+                phi_vec = np.linspace(start_phi[i],stop_phi[i],accuracy)
+                phi_list.append(phi_vec)
+
+        phi_matrix = np.column_stack(phi_list)
+        
+        return phi_matrix

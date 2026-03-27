@@ -4,8 +4,8 @@ if not hasattr(np, 'disp'):
 import roboticstoolbox as rtb
 from spatialmath import SE3
 import matplotlib.widgets as widgets
-from kinematicTools import inverseKinematic
-
+from kinematicTools import inverseKinematic, axial_interpolation
+import time
 
 # Łatka naprawiająca suwaki w nowym matplotlib
 oryginalny_slider = widgets.Slider.__init__
@@ -27,24 +27,31 @@ robot = rtb.DHRobot([
     rtb.RevoluteDH(d=L_4+L_5, a=0,   alpha=0)
 ], name="Moj Robot")
 
-"""
-phi_0 = np.radians(71.56)
-phi_1 = np.radians(56.81)
-phi_2 = np.radians(166.75)
-phi_3 = np.radians(155.29)
-phi_4 = np.radians(130.82)
-phi_5 = np.radians(73.26)
-"""
+start_phi = inverseKinematic(0.2, 0.2, 0.1, 0.0, 180.0, 0.0)
+stop_phi = inverseKinematic(0.2, -0.2, 0.1, 0.0, 180.0, 0.0)
 
-X = 0.349
-Y = 0.077
-Z = 0.427
-r = 0.0
-p = -90.0
-yaw = -90.0
+axial_matrix = axial_interpolation(start_phi,stop_phi,10)
 
-phi_0, phi_1, phi_2, phi_3, phi_4, phi_5 = inverseKinematic(X,Y,Z,r,p,yaw) 
+# Startujemy od kątów zerowych lub z pierwszego punktu
+aktualne_katy = np.zeros(6) 
 
-angles = [phi_0, phi_1, phi_2, phi_3, phi_4, phi_5]
+env = robot.plot(aktualne_katy, block=False)
 
-robot.teach(angles)
+for i in range(10):
+    # Oblicz IK dla punktu docelowego
+    docelowe_katy = axial_matrix[i]
+    
+    # Wygeneruj trajektorię
+    trajektoria = rtb.jtraj(aktualne_katy, docelowe_katy, 50)
+    
+    # 2. Animacja ruchu
+    for q_step in trajektoria.q:
+        # Aktualizacja pozycji robota na wykresie
+        env.step(0.00001) # Mały krok czasowy dla płynności
+        robot.q = q_step
+        
+    aktualne_katy = docelowe_katy
+
+# 3. Zatrzymaj okno po zakończeniu ruchu, żeby nie zgasło od razu
+print("Ruch zakończony.")
+env.hold()
