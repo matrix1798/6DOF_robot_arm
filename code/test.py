@@ -4,8 +4,8 @@ if not hasattr(np, 'disp'):
 import roboticstoolbox as rtb
 from spatialmath import SE3
 import matplotlib.widgets as widgets
-from tools import rotation_mat
-from IKequals import phi_0, phi_1, phi_2, phi_3, phi_4, phi_5 
+from kinematicTools import inverseKinematic
+
 
 # Łatka naprawiająca suwaki w nowym matplotlib
 oryginalny_slider = widgets.Slider.__init__
@@ -35,6 +35,16 @@ phi_3 = np.radians(155.29)
 phi_4 = np.radians(130.82)
 phi_5 = np.radians(73.26)
 """
+
+X = 0.349
+Y = 0.077
+Z = 0.427
+r = 0.0
+p = -90.0
+yaw = -90.0
+
+phi_0, phi_1, phi_2, phi_3, phi_4, phi_5 = inverseKinematic(X,Y,Z,r,p,yaw) 
+
 angles = [phi_0, phi_1, phi_2, phi_3, phi_4, phi_5]
 
 robot.teach(angles)
