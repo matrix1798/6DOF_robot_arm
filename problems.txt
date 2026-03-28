@@ -1,0 +1,9 @@
+1. Komputer nie widzial Servo Drivera. Instrukcja naprawy:
+	Pobierz i zainstaluj sterowniki
+	Płytki Waveshare oparte na ESP32 zazwyczaj korzystają z układu Silicon Labs CP2102.
+
+	Wejdź na stronę Silicon Labs CP210x Drivers.
+
+	Pobierz paczkę CP210x Universal Windows Driver.
+
+	Rozpakuj ją, kliknij prawym przyciskiem myszy na plik silabser.inf i wybierz 	Zainstaluj (lub uruchom instalator .exe, jeśli jest dostępny).
