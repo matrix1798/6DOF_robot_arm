@@ -62,6 +62,9 @@ Zamówienie serwa i serial bus controler oraz sprawdzenie poprawności działani
 Przygotowanie schematu kinematyki robota, sformułowanie równań kinematyki odwrotnej oraz przedstawnie wyników promotorowi.
 
 6. 6.04-12.04
+
+Zamodelowanie uchwytu na serwo oraz podstawy robota.
+
 7. 13.04-19.04
 8. 20.04-26.04
 9. 27.04-3.05
