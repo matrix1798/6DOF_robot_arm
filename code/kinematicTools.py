@@ -89,13 +89,13 @@ def inverseKinematic(X,Y,Z,roll,pitch,yaw):
                 phi_3 = np.atan2(-R_3_6[1, 2], -R_3_6[0, 2])
                 phi_5 = np.atan2(-R_3_6[2, 1], R_3_6[2, 0])
 
-        print(f'\nPozycja celu: x: {X}m, y: {Y}, z: {Z}\n roll: {r}, pitch: {p}, yaw: {yaw}')
-        print(f'Phi_0 = {np.degrees(phi_0)}')
-        print(f'Phi_1 = {np.degrees(phi_1)}')
-        print(f'Phi_2 = {np.degrees(phi_2)}')
-        print(f'Phi_3 = {np.degrees(phi_3)}')
-        print(f'Phi_4 = {np.degrees(phi_4)}')
-        print(f'Phi_5 = {np.degrees(phi_5)}')
+        print(f'\nPozycja celu: x: {X}m, y: {Y}, z: {Z}\nroll: {r}, pitch: {p}, yaw: {yaw}')
+        print(f'Phi_0 = {np.degrees(phi_0):.3f}')
+        print(f'Phi_1 = {np.degrees(phi_1):.3f}')
+        print(f'Phi_2 = {np.degrees(phi_2):.3f}')
+        print(f'Phi_3 = {np.degrees(phi_3):.3f}')
+        print(f'Phi_4 = {np.degrees(phi_4):.3f}')
+        print(f'Phi_5 = {np.degrees(phi_5):.3f}')
 
         return phi_0, phi_1, phi_2, phi_3, phi_4, phi_5
 
