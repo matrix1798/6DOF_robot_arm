@@ -63,9 +63,12 @@ Przygotowanie schematu kinematyki robota, sformułowanie równań kinematyki odw
 
 6. 6.04-12.04
 
-Zamodelowanie uchwytu na serwo oraz podstawy robota.
+Zamodelowanie uchwytu na serwo oraz podstawy robota. (nie zrealizowane)
 
 7. 13.04-19.04
+
+Zamodelowanie uchwytu na serwo oraz podstawy robota.
+
 8. 20.04-26.04
 9. 27.04-3.05
 10. 4.05-10.05
