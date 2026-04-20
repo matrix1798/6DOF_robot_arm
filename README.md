@@ -70,8 +70,17 @@ Zamodelowanie uchwytu na serwo oraz podstawy robota. (nie zrealizowane)
 Zamodelowanie uchwytu na serwo oraz podstawy robota.
 
 8. 20.04-26.04
+
+Modelowanie struktury robota. Upożądkowie kodu i dalsze prace.
+
 9. 27.04-3.05
+
+Modelowanie struktury robota.
+
 10. 4.05-10.05
+
+Modelowanie struktury robota.
+
 11. 11.05-17.05
 
 **Pierwszy milestone:** Zamodelowanie połowy robota
