@@ -1,6 +1,10 @@
 import sympy as sp
-from tools import rotation_mat
+from code.mathTools import rotation_mat
 import numpy as np
+
+"""
+W tym pliku zawarty jest kod który pomógł wyznaczyc równanai kinematyki odwrotnej.
+"""
 
 phi0, phi1, phi2, phi3, phi4, phi5 = sp.symbols('phi_0 phi_1 phi_2 phi_3 phi_4 phi_5')
 L_0,L_1,L_2,L_3,L_4,L_5 = sp.symbols('L_0 L_1 L_2 L_3 L_4 L_5')

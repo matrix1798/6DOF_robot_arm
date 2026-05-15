@@ -1,5 +1,7 @@
-from tools import rotation_mat
+import mathTools as mt
 import numpy as np
+
+#TODO zamienic na klase
 
 def inverseKinematic(X,Y,Z,roll,pitch,yaw):
 
@@ -22,7 +24,7 @@ def inverseKinematic(X,Y,Z,roll,pitch,yaw):
 
         P_goal = np.array([X,Y,Z,np.radians(r),np.radians(p),np.radians(yaw)])
 
-        Rotation_goal = rotation_mat(roll = r, pitch = p, yaw = yaw)
+        Rotation_goal = mt.rotation_mat(roll = r, pitch = p, yaw = yaw)
         P_wc = P_goal[0:3] - Rotation_goal@np.array([0,0,L_4+L_5]).T
 
         #phi_0
@@ -37,14 +39,12 @@ def inverseKinematic(X,Y,Z,roll,pitch,yaw):
         L_23 = L_2 + L_3
         D = (L_1**2 + L_23**2 - R**2 - z**2)/(2*L_1*L_23)
 
-        #phi_2 +/- zalezy od polozenia łokcia
+        #phi_2 +/- zalezy od polozenia łokcia (- dla łokci aw górę)
         phi_2 = np.atan2(D,-np.sqrt(1-D**2))
 
-        #zmienne pomocnicze
+        #phi_1
         k1 = L_1 - L_23*np.sin(phi_2)
         k2 = L_23*np.cos(phi_2)
-
-        #phi_1
         phi_1 = np.atan2(k1*z - k2*R, k1*R + k2*z)
 
         #rotacja 0-3
