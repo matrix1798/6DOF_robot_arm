@@ -83,12 +83,24 @@ Modelowanie struktury robota.
 
 11. 11.05-17.05
 
-**Pierwszy milestone:** Zamodelowanie połowy robota
+Poprawa organizacji repozytorium i kodu.
 
 12. 18.05-24.05
+
+Modelowanie struktury robota.
+
 13. 25.05-31.05
+
+Modelowanie struktury robota.
+
 14. 1.06-7.06
+
+Modelowanie struktury robota.
+
 15. 8.06-14.06
+
+**Milestone 1:** Zdanie raportu z postępu pracy inżynierskiej.
+
 16. 15.06-21.06
 17. 22.06-28.06
 18. 29.06-5.07
