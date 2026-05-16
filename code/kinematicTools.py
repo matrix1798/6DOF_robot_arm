@@ -1,113 +1,123 @@
 import mathTools as mt
 import numpy as np
 
-#TODO zamienic na klase
 
-def inverseKinematic(X,Y,Z,roll,pitch,yaw):
+class robot6DOF:
 
         """
-        Funkcja do obliczenia wartości kątowych złączy na podstawie
-        podanej pozycji efektora i oreintacji względem układu bazowego
-
-        Wyjście:
-        kąty złączy w radianach
+        Klasa służaca do symulacji ramienia robota o konkretnej konstrukcji otrzymanej z pomoca metody DH
         """
 
-        X = X
-        Y = Y
-        Z = Z
-        r = roll
-        p = pitch
-        yaw = yaw
+        def __init__(self,L_0, L_1, L_2, L_3, L_4, L_5):
+                self.L_0 = L_0
+                self.L_1 = L_1
+                self.L_2 = L_2
+                self.L_3 = L_3
+                self.L_4 = L_4
+                self.L_5 = L_5
 
-        L_0, L_1, L_2, L_3, L_4, L_5 = 0.15, 0.20, 0.15, 0.15, 0.15, 0.05
+        def inverseKinematic(self,X,Y,Z,roll,pitch,yaw):
 
-        P_goal = np.array([X,Y,Z,np.radians(r),np.radians(p),np.radians(yaw)])
+                """
+                Funkcja do obliczenia wartości kątowych złączy na podstawie
+                podanej pozycji efektora i oreintacji względem układu bazowego
 
-        Rotation_goal = mt.rotation_mat(roll = r, pitch = p, yaw = yaw)
-        P_wc = P_goal[0:3] - Rotation_goal@np.array([0,0,L_4+L_5]).T
+                Wyjście:
+                kąty złączy w radianach
+                """
 
-        #phi_0
-        phi_0 = np.atan2(P_wc[1],P_wc[0])
+                X = X
+                Y = Y
+                Z = Z
+                r = roll
+                p = pitch
+                yaw = yaw
 
-        #zmienne pomocnicze
-        x = P_wc[0]
-        y = P_wc[1]
+                P_goal = np.array([X,Y,Z,np.radians(r),np.radians(p),np.radians(yaw)])
 
-        R = np.sqrt(x**2 + y**2)
-        z = P_wc[2] - L_0
-        L_23 = L_2 + L_3
-        D = (L_1**2 + L_23**2 - R**2 - z**2)/(2*L_1*L_23)
+                Rotation_goal = mt.rotation_mat(roll = r, pitch = p, yaw = yaw)
+                P_wc = P_goal[0:3] - Rotation_goal@np.array([0,0,self.L_4+self.L_5]).T
 
-        #phi_2 +/- zalezy od polozenia łokcia (- dla łokci aw górę)
-        phi_2 = np.atan2(D,-np.sqrt(1-D**2))
+                #phi_0
+                phi_0 = np.atan2(P_wc[1],P_wc[0])
 
-        #phi_1
-        k1 = L_1 - L_23*np.sin(phi_2)
-        k2 = L_23*np.cos(phi_2)
-        phi_1 = np.atan2(k1*z - k2*R, k1*R + k2*z)
+                #zmienne pomocnicze
+                x = P_wc[0]
+                y = P_wc[1]
 
-        #rotacja 0-3
-        mat_rot_0_1 = np.array([
-                [np.cos(phi_0), 0,  np.sin(phi_0),0],
-                [np.sin(phi_0), 0, -np.cos(phi_0),0],
-                [  0 , 1,   0 ,L_0],
-                [0,0,0,1]
-                ])
+                R = np.sqrt(x**2 + y**2)
+                z = P_wc[2] - self.L_0
+                L_23 = self.L_2 + self.L_3
+                D = (self.L_1**2 + L_23**2 - R**2 - z**2)/(2*self.L_1*L_23)
 
-        mat_rot_1_2 = np.array([
-                [np.cos(phi_1), -np.sin(phi_1),  0,L_1*np.cos(phi_1)],
-                [np.sin(phi_1), np.cos(phi_1), 0, L_1*np.sin(phi_1)],
-                [  0 , 0,   1  , 0],
-                [0,0,0,1]
-                ])
+                #phi_2 +/- zalezy od polozenia łokcia (- dla łokci aw górę)
+                phi_2 = np.atan2(D,-np.sqrt(1-D**2))
 
-        mat_rot_2_3 = np.array([
-                [np.cos(phi_2), 0,  -np.sin(phi_2),0],
-                [np.sin(phi_2), 0, np.cos(phi_2),0],
-                [  0 , -1,   0 , 0],
-                [0,0,0,1]
-                ])
+                #phi_1
+                k1 = self.L_1 - L_23*np.sin(phi_2)
+                k2 = L_23*np.cos(phi_2)
+                phi_1 = np.atan2(k1*z - k2*R, k1*R + k2*z)
 
-        R_0_3 = mat_rot_0_1@mat_rot_1_2@mat_rot_2_3
-        R_0_3 = R_0_3[:3,:3]
-        R_3_6 = R_0_3.T @ Rotation_goal
+                #rotacja 0-3
+                mat_rot_0_1 = np.array([
+                        [np.cos(phi_0), 0,  np.sin(phi_0),0],
+                        [np.sin(phi_0), 0, -np.cos(phi_0),0],
+                        [  0 , 1,   0 ,self.L_0],
+                        [0,0,0,1]
+                        ])
 
-        #phi_3, phi_4 i phi_5 
-        sin_phi4 = np.sqrt(R_3_6[0, 2]**2 + R_3_6[1, 2]**2)
-        cos_phi4 = R_3_6[2, 2]
+                mat_rot_1_2 = np.array([
+                        [np.cos(phi_1), -np.sin(phi_1),  0,self.L_1*np.cos(phi_1)],
+                        [np.sin(phi_1), np.cos(phi_1), 0, self.L_1*np.sin(phi_1)],
+                        [  0 , 0,   1  , 0],
+                        [0,0,0,1]
+                        ])
 
-        # Jeśli nadgarstek jest wyprostowany (osobliwość)
-        if sin_phi4 < 1e-6:
-                phi_4 = 0.0
-                phi_3 = 0.0
-                # phi_5 przejmuje całkowity obrót nadgarstka
-                phi_5 = np.atan2(R_3_6[1, 0], R_3_6[0, 0])
-        else:
-                # Standardowe wyliczenie
-                phi_4 = np.atan2(sin_phi4, cos_phi4)
-                phi_3 = np.atan2(-R_3_6[1, 2], -R_3_6[0, 2])
-                phi_5 = np.atan2(-R_3_6[2, 1], R_3_6[2, 0])
+                mat_rot_2_3 = np.array([
+                        [np.cos(phi_2), 0,  -np.sin(phi_2),0],
+                        [np.sin(phi_2), 0, np.cos(phi_2),0],
+                        [  0 , -1,   0 , 0],
+                        [0,0,0,1]
+                        ])
 
-        print(f'\nPozycja celu: x: {X}m, y: {Y}, z: {Z}\nroll: {r}, pitch: {p}, yaw: {yaw}')
-        print(f'Phi_0 = {np.degrees(phi_0):.3f}')
-        print(f'Phi_1 = {np.degrees(phi_1):.3f}')
-        print(f'Phi_2 = {np.degrees(phi_2):.3f}')
-        print(f'Phi_3 = {np.degrees(phi_3):.3f}')
-        print(f'Phi_4 = {np.degrees(phi_4):.3f}')
-        print(f'Phi_5 = {np.degrees(phi_5):.3f}')
+                R_0_3 = mat_rot_0_1@mat_rot_1_2@mat_rot_2_3
+                R_0_3 = R_0_3[:3,:3]
+                R_3_6 = R_0_3.T @ Rotation_goal
 
-        return phi_0, phi_1, phi_2, phi_3, phi_4, phi_5
+                #phi_3, phi_4 i phi_5 
+                sin_phi4 = np.sqrt(R_3_6[0, 2]**2 + R_3_6[1, 2]**2)
+                cos_phi4 = R_3_6[2, 2]
 
+                # Jeśli nadgarstek jest wyprostowany (osobliwość)
+                if sin_phi4 < 1e-6:
+                        phi_4 = 0.0
+                        phi_3 = 0.0
+                        # phi_5 przejmuje całkowity obrót nadgarstka
+                        phi_5 = np.atan2(R_3_6[1, 0], R_3_6[0, 0])
+                else:
+                        # Standardowe wyliczenie
+                        phi_4 = np.atan2(sin_phi4, cos_phi4)
+                        phi_3 = np.atan2(-R_3_6[1, 2], -R_3_6[0, 2])
+                        phi_5 = np.atan2(-R_3_6[2, 1], R_3_6[2, 0])
 
-def axial_interpolation(start_phi,stop_phi,accuracy):
+                print(f'\nPozycja celu: x: {X}m, y: {Y}, z: {Z}\nroll: {r}, pitch: {p}, yaw: {yaw}')
+                print(f'Phi_0 = {np.degrees(phi_0):.3f}')
+                print(f'Phi_1 = {np.degrees(phi_1):.3f}')
+                print(f'Phi_2 = {np.degrees(phi_2):.3f}')
+                print(f'Phi_3 = {np.degrees(phi_3):.3f}')
+                print(f'Phi_4 = {np.degrees(phi_4):.3f}')
+                print(f'Phi_5 = {np.degrees(phi_5):.3f}')
 
-        phi_list = []
+                return phi_0, phi_1, phi_2, phi_3, phi_4, phi_5
 
-        for i in range(len(start_phi)):
-                phi_vec = np.linspace(start_phi[i],stop_phi[i],accuracy)
-                phi_list.append(phi_vec)
+        def axial_interpolation(self,start_phi,stop_phi,accuracy):
 
-        phi_matrix = np.column_stack(phi_list)
-        
-        return phi_matrix
+                phi_list = []
+
+                for i in range(len(start_phi)):
+                        phi_vec = np.linspace(start_phi[i],stop_phi[i],accuracy)
+                        phi_list.append(phi_vec)
+
+                phi_matrix = np.column_stack(phi_list)
+                
+                return phi_matrix

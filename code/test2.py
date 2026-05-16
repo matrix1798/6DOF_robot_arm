@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import kinematicTools as KT
-
+from kinematicTools import robot6DOF
 # Generowanie macierzy transformacji ze standardowych parametrów DH
 def dh_matrix(theta, d, a, alpha):
     return np.array([
@@ -23,7 +23,8 @@ roll = 0.0
 pitch = 180.0
 yaw = 0.0
 
-q = KT.inverseKinematic(X,Y,Z,roll,pitch,yaw)
+robot = robot6DOF(L_0, L_1, L_2, L_3, L_4, L_5)
+q = robot.inverseKinematic(X,Y,Z,roll,pitch,yaw)
 
 # Tabela DH w kolejności: [theta, d, a, alpha]
 dh_params = [
