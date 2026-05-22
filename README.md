@@ -19,91 +19,23 @@ Celem pracy jest zaprojektowanie i budowa modelu fizycznego antropomorficznego r
 ## Stos Technologiczny
 
 ### 1. Warstwa Sprzętowa (Hardware)
-* **Komputer nadrzędny:** Raspberry Pi 5 (lub 4B)
-* **Sterownik Real-Time:** Mikrokontroler STM32 
-* **Elementy wykonawcze:** Serwomechanizmy magistrali szeregowej (Waveshare ST3235 na osie dolne, ST3215 na osie górne)
-* **Sterownik servomechanizmów:** Dedyowany serial bus controler
-* **Zasilanie:** Zasilacz 12V odpowiednio wydajny
-* **Mechanika:** Elementy z druku 3D (PETG/ABS/ASA), łożyska kulkowe poprzeczne, łożysko oporowe w osi bazy
+* **Komputer nadrzędny:** Raspberry Pi 5 / PC
+* **Elementy wykonawcze:** Serwomechanizmy magistrali szeregowej (Waveshare ST3020)
+* **Sterownik servomechanizmów:** Dedyowany serial bus controler - ESP32 Servo Driver Expansion Board
+* **Zasilanie:** Zasilacz 12V/25A
+* **Mechanika:** Elementy z druku 3D (PETG), łożyska kulkowe poprzeczne, łożysko oporowe w osi bazy
 
 ### 2. Warstwa Oprogramowania (Software)
 * **Projektowanie 3D (CAD):** Autodesk Fusion
-* **System Operacyjny:** Windows lub Ubuntu Linux 
+* **System Operacyjny:** Linux
 * **Framework Robotyki:** ROS 2 (dystrybucja Humble)
   * **Narzędzia:** MoveIt 2 (planowanie trajektorii), RViz (wizualizacja 3D)
-* **Języki programowania:** C++ / Python (ROS), C/C++ (STM32)
-* **Środowisko wbudowane:** STM32CubeIDE (z wykorzystaniem bibliotek HAL / LL)
+* **Języki programowania:** C++ / Python (ROS), C/C++ (ESP32)
 
 ### 3. Warstwa Komunikacyjna (Protokoły)
-* **PC ↔ STM32:** UART / wirtualny port COM po USB (do komunikacji z ROS)
-* **STM32 ↔ Serwa:** UART (Single-Wire Half-Duplex) - zadawanie pozycji i odczyt danych z enkoderów
+* **Servo Driver ↔ Serwa:** UART (Single-Wire Half-Duplex) - zadawanie pozycji i odczyt danych z enkoderów
 
-## Wybrane komponenty:
 
-## Harmonogram prac:
-1. 2.03-8.03:
 
-Przygotowanie repozytorium, rozpisanie stacku technologicznego oraz zapisanie harmonogramu prac.
 
-2. 9.03-15.03:
-
-Roziwązanie równań kinematyki odwrotnej oraz przygotowanie symulacji robota.
-
-3. 16.03-22.03
-
-Poprawa algorytmu kinematyki odwrotnej, wybranie konkretnego hardwareu.
-
-4. 23.03-29.03
-
-Zamówienie serwa i serial bus controler oraz sprawdzenie poprawności działania. Przeprowadzenie testów kinematyki odwrotnej.
-
-5. 30.03-5.04
-
-Przygotowanie schematu kinematyki robota, sformułowanie równań kinematyki odwrotnej oraz przedstawnie wyników promotorowi.
-
-6. 6.04-12.04
-
-Zamodelowanie uchwytu na serwo oraz podstawy robota. (nie zrealizowane)
-
-7. 13.04-19.04
-
-Zamodelowanie uchwytu na serwo oraz podstawy robota.
-
-8. 20.04-26.04
-
-Modelowanie struktury robota. Upożądkowie kodu i dalsze prace.
-
-9. 27.04-3.05
-
-Modelowanie struktury robota.
-
-10. 4.05-10.05
-
-Modelowanie struktury robota.
-
-11. 11.05-17.05
-
-Poprawa organizacji repozytorium i kodu.
-
-12. 18.05-24.05
-
-Modelowanie struktury robota.
-
-13. 25.05-31.05
-
-Modelowanie struktury robota.
-
-14. 1.06-7.06
-
-Modelowanie struktury robota.
-
-15. 8.06-14.06
-
-**Milestone 1:** Zdanie raportu z postępu pracy inżynierskiej.
-
-16. 15.06-21.06
-17. 22.06-28.06
-18. 29.06-5.07
-19. 6.07-12.07
-20. 13.07-19.07
 
