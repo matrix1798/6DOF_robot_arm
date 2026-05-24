@@ -110,7 +110,8 @@ class robot6DOF:
 
                 return phi_0, phi_1, phi_2, phi_3, phi_4, phi_5
 
-        def axial_interpolation(self,start_phi,stop_phi,accuracy):
+        @classmethod
+        def axial_interpolation(cls,start_phi,stop_phi,accuracy):
 
                 phi_list = []
 
