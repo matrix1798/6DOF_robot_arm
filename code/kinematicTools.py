@@ -24,7 +24,7 @@ class robot6DOF:
                 
                 Input:
                 X, Y, Z - system coordinates in meteres
-                Angels of joints in radians
+                Angels of joints in degrees
                 """
 
                 X = X
@@ -104,7 +104,7 @@ class robot6DOF:
                         phi_5 = np.atan2(-R_3_6[2, 1], R_3_6[2, 0])
                 
                 if show_angels:
-                        print(f'\nGoal position: x: {X}m, y: {Y}, z: {Z}\nroll: {r}, pitch: {p}, yaw: {yaw}')
+                        print(f'Goal position: x: {X}m, y: {Y}, z: {Z}\nroll: {r}, pitch: {p}, yaw: {yaw}')
                         print(f'Phi_0 = {np.degrees(phi_0):.3f}')
                         print(f'Phi_1 = {np.degrees(phi_1):.3f}')
                         print(f'Phi_2 = {np.degrees(phi_2):.3f}')
@@ -126,3 +126,6 @@ class robot6DOF:
                 phi_matrix = np.column_stack(phi_list)
                 
                 return phi_matrix
+
+        def linear_interpolation(cls, start_phi, stop_phi, accuracy):
+                pass

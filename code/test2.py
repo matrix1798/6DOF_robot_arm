@@ -1,6 +1,7 @@
 import numpy as np
 import roboticstoolbox as rtb
 from roboticstoolbox.backends.PyPlot import PyPlot
+from kinematicTools import robot6DOF
 
 #length of each robot part
 L_0, L_1, L_2, L_3, L_4, L_5 = 0.15, 0.20, 0.15, 0.15, 0.15, 0.05
@@ -16,9 +17,16 @@ robot = rtb.DHRobot([
 ], name="Robot ^DOF")
 
 #calculate angels for each joint
-q_start = np.array([0, 0, 0, 0, 0, 0])
-q_stop = np.array([np.pi/2, np.pi/4, -np.pi/3, np.pi/4, np.pi/2, np.pi])
-steps = 100
+robot_6DOF = robot6DOF(L_0, L_1, L_2, L_3, L_4, L_5)
+X = 0.2
+Y = 0.0
+Z = 0.3
+roll = 180
+pitch = 0
+yaw = 0
+q_start = robot_6DOF.inverseKinematic(X, Y, Z, roll, pitch, yaw)
+q_stop = q_start
+steps = 10
 phi_matrix = np.zeros((steps, 6))
 for i in range(6):
     phi_matrix[:, i] = np.linspace(q_start[i], q_stop[i], steps)
