@@ -14,7 +14,7 @@ robot = rtb.DHRobot([
     rtb.RevoluteDH(d=L_2+L_3,  a=0,   alpha=np.pi/2),
     rtb.RevoluteDH(d=0,        a=0,   alpha=-np.pi/2),
     rtb.RevoluteDH(d=L_4+L_5,  a=0,   alpha=0)
-], name="Robot ^DOF")
+], name="Robot 6DOF")
 
 #calculate angels for each joint
 robot_6DOF = robot6DOF(L_0, L_1, L_2, L_3, L_4, L_5)
