@@ -61,3 +61,52 @@ def rotation_mat (roll,pitch,yaw):
 
     return rotation
 
+def rollPitchYawToQuaternion(roll, pitch, yaw):
+    """
+    Input:
+    roll, pitch, yaw - degrees
+
+    Output (quaternion in form):
+    q = w + x*i + y*j + z*k
+    """
+
+    r = np.radians(roll)
+    p = np.radians(pitch)
+    yw = np.radians(yaw)
+
+    sin_r = np.sin(r/2.0)
+    cos_r = np.cos(r/2.0)
+    sin_p = np.sin(p/2.0)
+    cos_p = np.cos(p/2.0)
+    sin_yw = np.sin(yw/2.0)
+    cos_yw = np.cos(yw/2.0)
+
+    w = cos_r*cos_p*cos_yw + sin_r*sin_p*sin_yw
+    x = sin_r*cos_p*cos_yw - cos_r*sin_p*sin_yw
+    y = cos_r*sin_p*cos_yw + sin_r*cos_p*sin_yw
+    z = cos_r*cos_p*sin_yw - sin_r*sin_p*cos_yw
+
+    return w, x, y, z
+
+def quaternionToRollPitchYaw (w, x, y ,z):
+
+    tolernace = 0.999
+
+    p = 2*(w*y - z*x)
+
+    # anti gimbal lock
+    if abs(p) >= tolernace:
+        roll = 0.0
+        if p < 0:
+            pitch = -90.0
+            yaw = -2.0*np.atan2(x,w) * 180 / np.pi
+        else:
+            pitch = 90.0
+            yaw = 2.0*np.atan2(x,w) * 180 / np.pi
+        
+    else:
+        roll = np.atan2(2*(w*x + y*z), 1 - 2*(x**2 + y**2)) * 180 / np.pi
+        pitch = np.arcsin(p) * 180 / np.pi
+        yaw = np.atan2(2*(w*z + x*y), 1 - 2*(y**2 + z**2)) * 180 / np.pi
+
+    return roll, pitch, yaw

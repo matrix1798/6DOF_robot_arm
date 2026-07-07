@@ -1,6 +1,6 @@
 import mathTools as mt
 import numpy as np
-
+from mathTools import rollPitchYawToQuaternion, quaternionToRollPitchYaw
 
 class robot6DOF:
 
@@ -112,7 +112,7 @@ class robot6DOF:
                         print(f'Phi_4 = {np.degrees(phi_4):.3f}')
                         print(f'Phi_5 = {np.degrees(phi_5):.3f}')
 
-                return phi_0, phi_1, phi_2, phi_3, phi_4, phi_5
+                return [phi_0, phi_1, phi_2, phi_3, phi_4, phi_5]
 
         @classmethod
         def axialInterpolation(cls,start_phi,stop_phi,accuracy):
@@ -127,5 +127,64 @@ class robot6DOF:
                 
                 return phi_matrix
 
-        def linearInterpolation(cls, start_phi, stop_phi, accuracy):
-                pass
+        def linearInterpolation(self, P_start:list, P_goal:list, accuracy):
+                """
+                Input:
+                P_0/1 = [x, y, z, roll, pitch, yaw]
+                x, y, z - in meters
+                roll, pitch, yaw - degrees
+                """
+
+                P_0 = np.array(P_start[:3])
+                w_0, x_0, y_0, z_0 = rollPitchYawToQuaternion(P_start[3], P_start[4], P_start[5])
+                
+                P_1 = np.array(P_goal[:3])
+                w_1, x_1, y_1, z_1 = rollPitchYawToQuaternion(P_goal[3], P_goal[4], P_goal[5])
+                
+                steps = np.linspace(0.0,1.0,accuracy)
+                q_list = []
+                P_s = np.zeros(3)
+                dif_P = P_1-P_0
+                tolerance = 0.0005
+                w_s = 0.0
+                x_s = 0.0
+                y_s = 0.0
+                z_s = 0.0
+
+                for s in steps:
+                        P_s = P_0 + s * dif_P
+
+                        cos_omega = w_0*w_1 + x_0*x_1 + y_0*y_1 + z_0*z_1
+
+                        if cos_omega < 0:
+                                w_1, x_1, y_1, z_1 = -w_1, -x_1, -y_1, -z_1
+                                cos_omega = -cos_omega
+                        
+                        if (1-cos_omega) < tolerance:
+                                w_s = ((1-s)*w_0 + s*w_1)
+                                x_s = ((1-s)*x_0 + s*x_1)
+                                y_s = ((1-s)*y_0 + s*y_1)
+                                z_s = ((1-s)*z_0 + s*z_1)
+
+                                norm = np.sqrt(w_s**2 + x_s**2 + y_s**2 + z_s**2)
+
+                                w_s /= norm
+                                x_s /= norm
+                                y_s /= norm
+                                z_s /= norm
+                        else:
+                                omega = np.arccos(cos_omega)
+                                sin_omega = np.sin(omega)
+                                w_s = np.sin((1-s)*omega)/sin_omega * w_0 + np.sin(s*omega)/sin_omega * w_1
+                                x_s = np.sin((1-s)*omega)/sin_omega * x_0 + np.sin(s*omega)/sin_omega * x_1
+                                y_s = np.sin((1-s)*omega)/sin_omega * y_0 + np.sin(s*omega)/sin_omega * y_1
+                                z_s = np.sin((1-s)*omega)/sin_omega * z_0 + np.sin(s*omega)/sin_omega * z_1
+
+                        roll, pitch, yaw = quaternionToRollPitchYaw(w_s, x_s, y_s, z_s)
+
+                        q_s = self.inverseKinematic(P_s[0], P_s[1], P_s[2], roll, pitch, yaw)
+                        q_list.append(q_s)
+
+                q_matrix = np.column_stack(q_list)
+
+                return q_matrix
