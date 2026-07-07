@@ -182,7 +182,7 @@ class robot6DOF:
 
                         roll, pitch, yaw = quaternionToRollPitchYaw(w_s, x_s, y_s, z_s)
 
-                        q_s = self.inverseKinematic(P_s[0], P_s[1], P_s[2], roll, pitch, yaw)
+                        q_s = self.inverseKinematic(P_s[0], P_s[1], P_s[2], roll, pitch, yaw,show_angels=False)
                         q_list.append(q_s)
 
                 q_matrix = np.column_stack(q_list)
