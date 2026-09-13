@@ -1,6 +1,6 @@
-import mathTools as mt
+import code.tools.mathTools as mt
 import numpy as np
-from mathTools import rollPitchYawToQuaternion, quaternionToRollPitchYaw
+from .mathTools import rollPitchYawToQuaternion, quaternionToRollPitchYaw
 
 class robot6DOF:
 

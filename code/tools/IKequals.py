@@ -1,5 +1,5 @@
 import sympy as sp
-from code.mathTools import rotation_mat
+from mathTools import rotation_mat
 import numpy as np
 
 """

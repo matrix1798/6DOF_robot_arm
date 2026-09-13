@@ -1,4 +1,4 @@
-from kinematicTools import robot6DOF
+from ..tools.kinematicTools import robot6DOF
 
 """
     Test of implemented invers kinematic equals of 6DOF robot arm. 
