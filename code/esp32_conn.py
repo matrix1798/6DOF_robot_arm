@@ -1,3 +1,4 @@
+import time;
 import serial
 import serial.tools.list_ports
 from code.tools.kinematicTools import robot6DOF
@@ -19,3 +20,15 @@ for port in ports:
 BAUD_RATE = 115200
 
 servo_driver = serial.Serial(PORT, BAUD_RATE)
+servo_driver.setDTR(False)
+servo_driver.setRTS(False)
+
+#without this when PC open a conn port he send a reset signal to esp32
+print("Czekanie na uruchomienie sie esp32...")
+time.sleep(8)
+
+positions = [1010,1000]
+msg = f"<{','.join(map(str,positions))}>"
+
+servo_driver.write(msg.encode("utf-8"))
+print(f"Wyslano wiadomosc: {msg}")
