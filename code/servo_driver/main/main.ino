@@ -6,21 +6,27 @@ SMS_STS Servo_ST;
 // GPIO 18 - S_RXD, GPIO 19 - S_TXD, as default.
 #define S_RXD 18
 #define S_TXD 19
-#define NUM_SERVOS 2
+#define NUM_SERVOS 6
 
 
 std::vector<int> servo_list;
 
+byte id_array[NUM_SERVOS] = {1,2,3,4,5,6};
+int16_t pos_array[NUM_SERVOS] = {0,0,0,0,0,0};
+uint16_t spd_array[NUM_SERVOS];
+byte acc_array[NUM_SERVOS];
+
+//feadback data
 int pos;
 int voltage;
 int temper;
 int current;
+int16_t pos_fead_array[NUM_SERVOS];
+int16_t volt_fead_array[NUM_SERVOS];
+int16_t temper_fead_array[NUM_SERVOS];
+int16_t current_fead_array[NUM_SERVOS];
 
-byte id_array[NUM_SERVOS] = {1,2};
-int16_t pos_array[NUM_SERVOS] = {0,0};
-uint16_t spd_array[NUM_SERVOS];
-byte acc_array[NUM_SERVOS];
-
+// variable to recv data
 const byte num_chars = 64;
 char received_chars[num_chars];
 boolean new_data = false;
@@ -92,6 +98,18 @@ void loop() {
   Servo_ST.RegWriteAction();
   delay(3000);
 */
+  // read all data from servos
+  for (int id = 1; id <= 7 ; id++){
+    if(Servo_ST.FeadBack(id)!=-1){
+      pos_fead_array[id] = Servo_ST.ReadPos(id);
+      voltage_fead_array[id] = Servo_ST.ReadVoltage(id);
+      temper_fead_array[id] = Servo_ST.ReadTemper(id);
+      current_fead_array[id] = Servo_ST.ReadCurrent(id);
+    }
+  }
+
+  sendMessage();
+
   recvMessage();
   //Serial.println("Czekam na dane: ");
   if(new_data == true){
@@ -103,9 +121,7 @@ void loop() {
     delay(2000);
     new_data = false;
   }
-  Serial.print("Odczytane pozycje: ");
-  Serial.printf("%d, %d\n",pos_array[0],pos_array[1]);
-  delay(2000);
+
 }
 
 // reading signs from USB port without cpu blocking (no delay)
@@ -136,6 +152,22 @@ void recvMessage() {
       recv_in_progress = true;
     }
   }
+}
+
+// send feedback data from all servos
+void sendMessage() {
+
+  char mesg_part[100] = "";
+  char message[600] = "<";
+  for (int id = 1; id < 7; id++){
+    sprintf(mesg_part, "%d, %d, %d, %d, %d; ", id, pos_fead_array[id-1], voltage_fead_array[id-1],temper_fead_array[id-1],current_fead_array[id-1]);
+    strcat(message, mesg_part);
+  }  
+
+  strcat(message,'>');
+
+  Serial.print(message)l;
+
 }
 
 // Split received_chars
