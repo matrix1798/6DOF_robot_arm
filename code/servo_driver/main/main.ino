@@ -10,21 +10,22 @@ SMS_STS Servo_ST;
 
 
 std::vector<int> servo_list;
+static unsigned long lastSendTime = 0;
 
 byte id_array[NUM_SERVOS] = {1,2,3,4,5,6};
 int16_t pos_array[NUM_SERVOS] = {0,0,0,0,0,0};
 uint16_t spd_array[NUM_SERVOS];
 byte acc_array[NUM_SERVOS];
 
-//feadback data
+//feedback data
 int pos;
 int voltage;
 int temper;
 int current;
-int16_t pos_fead_array[NUM_SERVOS];
-int16_t volt_fead_array[NUM_SERVOS];
-int16_t temper_fead_array[NUM_SERVOS];
-int16_t current_fead_array[NUM_SERVOS];
+int16_t pos_feed_array[NUM_SERVOS];
+int16_t voltage_feed_array[NUM_SERVOS];
+int16_t temper_feed_array[NUM_SERVOS];
+int16_t current_feed_array[NUM_SERVOS];
 
 // variable to recv data
 const byte num_chars = 64;
@@ -99,17 +100,20 @@ void loop() {
   delay(3000);
 */
   // read all data from servos
-  for (int id = 1; id <= 7 ; id++){
-    if(Servo_ST.FeadBack(id)!=-1){
-      pos_fead_array[id] = Servo_ST.ReadPos(id);
-      voltage_fead_array[id] = Servo_ST.ReadVoltage(id);
-      temper_fead_array[id] = Servo_ST.ReadTemper(id);
-      current_fead_array[id] = Servo_ST.ReadCurrent(id);
+  for (int i = 0; i < 6 ; i++){
+    int id = id_array[i];
+    if(Servo_ST.FeedBack(id)!=-1){
+      pos_feed_array[i] = Servo_ST.ReadPos(id);
+      voltage_feed_array[i] = Servo_ST.ReadVoltage(id);
+      temper_feed_array[i] = Servo_ST.ReadTemper(id);
+      current_feed_array[i] = Servo_ST.ReadCurrent(id);
     }
   }
 
-  sendMessage();
-
+  if ((millis() - lastSendTime) > 1000){
+    sendMessage();
+    lastSendTime = millis();
+  }
   recvMessage();
   //Serial.println("Czekam na dane: ");
   if(new_data == true){
@@ -117,8 +121,8 @@ void loop() {
 
     Serial.print("Odczytane pozycje: ");
     Serial.printf("%d, %d\n",pos_array[0],pos_array[1]);
-    //Servo_ST.SyncWritePosEx(id_array, pos_array, spd_array, acc_array, NUM_SERVOS)
-    delay(2000);
+    Servo_ST.SyncWritePosEx(id_array, NUM_SERVOS,pos_array, spd_array, acc_array);
+    
     new_data = false;
   }
 
@@ -159,14 +163,15 @@ void sendMessage() {
 
   char mesg_part[100] = "";
   char message[600] = "<";
-  for (int id = 1; id < 7; id++){
-    sprintf(mesg_part, "%d, %d, %d, %d, %d; ", id, pos_fead_array[id-1], voltage_fead_array[id-1],temper_fead_array[id-1],current_fead_array[id-1]);
+  for (int i = 0; i < NUM_SERVOS; i++){
+    int id = id_array[i];
+    sprintf(mesg_part, "%d, %d, %d, %d, %d; ", id, pos_feed_array[i],temper_feed_array[i], voltage_feed_array[i],  current_feed_array[i]);
     strcat(message, mesg_part);
-  }  
+  }
 
-  strcat(message,'>');
+  strcat(message,">");
 
-  Serial.print(message)l;
+  Serial.print(message);
 
 }
 
