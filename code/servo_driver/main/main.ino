@@ -17,6 +17,8 @@ int16_t pos_array[NUM_SERVOS] = {0,0,0,0,0,0};
 uint16_t spd_array[NUM_SERVOS];
 byte acc_array[NUM_SERVOS];
 
+int speed;
+
 //feedback data
 int pos;
 int voltage;
@@ -147,7 +149,16 @@ void sendMessage() {
 void convertData() {
   char * strtok_indx;
 
-  strtok_indx = strtok(received_chars, ",");
+  strtok_indx = strtok(received_chars, "|");
+  if (strtok_indx != NULL){ 
+    speed = atoi(strtok_indx);
+  }
+
+  for(int i = 0; i < NUM_SERVOS; i++){
+    spd_array[i] = speed;
+  }
+
+  strtok_indx = strtok(NULL, ",");
 
   for(int i = 0; i < NUM_SERVOS; i++){
     if(strtok_indx != NULL) {
@@ -155,4 +166,5 @@ void convertData() {
       strtok_indx = strtok(NULL, ",");
     }
   }
+
 }

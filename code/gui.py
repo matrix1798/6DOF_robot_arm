@@ -33,8 +33,21 @@ async def main(page: ft.Page):
                     positions.append(current_pos) 
             else:
                 positions.append(val)
+
+        try:
+            speed = int(speed_change_text.value)
+
+            if speed < 0:
+                speed = 0
+            if speed > 4095:
+                speed = 4095
+
+        except (ValueError, TypeError):
+            print("Nieprawidłowa prędkość")
+            return
+
         
-        conn.sendMessage(positions)
+        conn.sendMessage(positions,speed)
         
 
     servo_pos_set_baner = []
@@ -77,6 +90,15 @@ async def main(page: ft.Page):
     servo_feadback_baner = ft.Column(
         controls=servo_feadback_value_lines,
         spacing=20
+    )
+
+    #------------------------------
+    # Button to change servos speed
+    #------------------------------
+
+    speed_change_text = ft.TextField(
+        label = 'Predkosc:',
+        width = 70
     )
 
     """
@@ -144,7 +166,8 @@ async def main(page: ft.Page):
         controls=[
             servo_position_input_bar,
             servo_feadback_baner,
-            close_app_btn
+            close_app_btn,
+            speed_change_text
             ],
         alignment = ft.MainAxisAlignment.CENTER
         )

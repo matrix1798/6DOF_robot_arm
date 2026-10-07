@@ -70,9 +70,8 @@ class servoConect:
                 print(f"Serial port read error: {e}")
                 time.sleep(1)
                 
-    def sendMessage(self, positions):
-
-        msg = f"<{','.join(map(str, positions))}>"
+    def sendMessage(self, positions, speed):
+        msg = f"<{speed}|{','.join(map(str, positions))}>"
         self.servo_driver.write(msg.encode("utf-8"))   
 
 
