@@ -22,7 +22,7 @@ class servoConect:
 
         BAUD_RATE = 115200
 
-        self.servo_driver = serial.Serial(PORT, BAUD_RATE, timeout=1)
+        self.servo_driver = serial.Serial(PORT, BAUD_RATE, timeout=0.1)
         self.servo_driver.setDTR(False)
         self.servo_driver.setRTS(False)
 

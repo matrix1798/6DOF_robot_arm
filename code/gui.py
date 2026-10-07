@@ -1,7 +1,8 @@
 import flet as ft
 from code.connection import servoConect
-import threading
 import time
+import threading
+import asyncio
 
 async def main(page: ft.Page):
     
@@ -78,6 +79,12 @@ async def main(page: ft.Page):
         spacing=20
     )
 
+    """
+    ------------------------------------------------------------
+    Slabo dziala aktulanie przesyalnie wartosci poprzez slidery.
+    Działa to ale strasznie szarpie przy zmianie.
+    ------------------------------------------------------------
+
     slider_list = []
 
     def changeSlider(e):
@@ -118,8 +125,10 @@ async def main(page: ft.Page):
     sliders_bar = ft.Column(
         controls = slider_list
     )
-
+    """
+    #--------------------
     # turn off app button
+    #--------------------
 
     async def closeApp(e):
        await page.window.destroy()
@@ -135,36 +144,38 @@ async def main(page: ft.Page):
         controls=[
             servo_position_input_bar,
             servo_feadback_baner,
-            close_app_btn,
-            sliders_bar
+            close_app_btn
             ],
         alignment = ft.MainAxisAlignment.CENTER
         )
 
     page.add(main_widget)
 
+
     threading.Thread(target=conn.recvFeedback, daemon=True).start()
 
-    def update_gui():
-
-        # 2. Synchronizujemy suwaki z fizyczną pozycją złącz
-        for idx in range(6):
-            current_pos = int(conn.pos_array[idx])
-            if current_pos != 0:
-                # Przeliczamy kroki (0-4095) z powrotem na stopnie (0-360) dla suwaka
-                slider_list[idx].value = (current_pos * 360) / 4095
-        
-        page.update() # Aktualizujemy GUI jednorazowo
+    async def update_gui():
 
         while True:
             for idx in range(6):
                 temp_text[idx].value = f"Temp: {conn.temp_array[idx]}"
                 pos_text[idx].value = f"Pos: {conn.pos_array[idx]}"
 
+                """
+                ------------------------------
+                Part of disabel slider feature
+                ------------------------------
+                
+                current_pos = int(conn.pos_array[idx])
+                if current_pos != 0:
+                    # Przeliczamy kroki (0-4095) z powrotem na stopnie (0-360) dla suwaka
+                    slider_list[idx].value = (current_pos * 360) / 4095
+                """
+                    
             page.update()
-            time.sleep(0.2)
+            await asyncio.sleep(0.1)
 
-    threading.Thread(target=update_gui, daemon=True).start()
+    page.run_task(update_gui)
 
 
 ft.run(main)

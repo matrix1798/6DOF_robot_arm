@@ -66,39 +66,7 @@ void setup() {
 }
 
 void loop() {
-/*
-  if(Servo_ST.FeedBack(1)!=-1){
-    pos = Servo_ST.ReadPos(1);
-    Serial.printf("Pozycja dla 1: %d\n", pos);
-    delay(3000);
-  }
-  if(Servo_ST.FeedBack(2)!=-1){
-    pos = Servo_ST.ReadPos(2);
-    Serial.printf("Pozycja dla 2: %d\n", pos);
-    delay(3000);
-  }
 
-  Servo_ST.RegWritePosEx(1, 500, 1000);
-  Servo_ST.RegWritePosEx(2, 500, 1000);
-  Servo_ST.RegWriteAction();
-  delay(3000);
-
-  if(Servo_ST.FeedBack(1)!=-1){
-    pos = Servo_ST.ReadPos(1);
-    Serial.printf("Pozycja dla 1: %d\n", pos);
-    delay(3000);
-  }
-  if(Servo_ST.FeedBack(2)!=-1){
-    pos = Servo_ST.ReadPos(2);
-    Serial.printf("Pozycja dla 2: %d\n", pos);
-    delay(3000);
-  }
-
-  Servo_ST.RegWritePosEx(1, 0, 1000);
-  Servo_ST.RegWritePosEx(2, 0, 1000); 
-  Servo_ST.RegWriteAction();
-  delay(3000);
-*/
   // read all data from servos
   for (int i = 0; i < 6 ; i++){
     int id = id_array[i];
@@ -110,7 +78,7 @@ void loop() {
     }
   }
 
-  if ((millis() - lastSendTime) > 1000){
+  if ((millis() - lastSendTime) > 100){
     sendMessage();
     lastSendTime = millis();
   }
@@ -171,7 +139,7 @@ void sendMessage() {
 
   strcat(message,">");
 
-  Serial.print(message);
+  Serial.println(message);
 
 }
 
