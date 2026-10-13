@@ -44,7 +44,7 @@ class servoConect:
                 if self.servo_driver.in_waiting > 0:
                     
                     msg = self.servo_driver.readline().decode('utf-8', errors='ignore').strip()
-                    print(msg)
+                    #print(msg)
 
                     if msg and msg[0] == '<' and msg[-1] == '>':
                         msg = msg[1:-1]

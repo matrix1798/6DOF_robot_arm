@@ -23,15 +23,18 @@ async def main(page: ft.Page):
         positions = []
         for idx in range(6):
             val = servo_pos_set_baner[idx].value
-            
+
             if not val:
                 current_pos = conn.pos_array[idx]
                 
                 if current_pos == 0 or current_pos == '0':
                     positions.append(2048) 
                 else:
-                    positions.append(current_pos) 
+                    positions.append(current_pos)
+                     
             else:
+                # map value 0-360 to 0-4095
+                val = int((int(val) * 4095 )/ 360)
                 positions.append(val)
 
         try:
@@ -71,18 +74,24 @@ async def main(page: ft.Page):
 
     temp_text = []
     pos_text = []
+    voltage_text = []
+    current_text = []
 
     servo_feadback_value_lines = []
     for idx in range(6):
         name = ft.Text(value=f"Servo {idx+1}:", color = ft.Colors.BLACK)
         temp = ft.Text(value=f"Temeperatura serva {idx+1}", color = ft.Colors.BLACK)
         pos = ft.Text(value=f"Pozycja serva {conn.pos_array[idx]}", color = ft.Colors.BLACK)
+        voltage = ft.Text(value=f"", color = ft.Colors.BLACK)
+        current = ft.Text(value=f"", color = ft.Colors.BLACK)
 
         pos_text.append(pos)
         temp_text.append(temp)
+        voltage_text.append(voltage)
+        current_text.append(current)
 
         servo_feadback = ft.Row(
-            controls=[name,temp,pos],
+            controls=[name,temp,pos,voltage,current],
             spacing= 20
             )
         servo_feadback_value_lines.append(servo_feadback)
@@ -181,8 +190,15 @@ async def main(page: ft.Page):
 
         while True:
             for idx in range(6):
+
+                pos_in_angle = int(conn.pos_array[idx])
+
+                pos_in_angle = pos_in_angle/4095 * 360
+
                 temp_text[idx].value = f"Temp: {conn.temp_array[idx]}"
-                pos_text[idx].value = f"Pos: {conn.pos_array[idx]}"
+                pos_text[idx].value = f"Pos: {pos_in_angle:.2f} ({conn.pos_array[idx]})"
+                voltage_text[idx].value = f"Volt: {conn.voltage_array[idx]}"
+                current_text[idx].value = f"Current: {conn.current_array[idx]}"
 
                 """
                 ------------------------------
