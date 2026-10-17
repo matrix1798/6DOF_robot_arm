@@ -33,7 +33,7 @@ class robot6DOF:
                 
                 Input:
                 X, Y, Z - system coordinates in meteres
-                Angels of joints in degrees
+                angles of joints in degrees
                 """
 
                 X = X
@@ -191,24 +191,24 @@ class robot6DOF:
 
                         roll, pitch, yaw = quaternionToRollPitchYaw(w_s, x_s, y_s, z_s)
 
-                        q_s = self.inverseKinematic(P_s[0], P_s[1], P_s[2], roll, pitch, yaw,show_angels=True)
+                        q_s = self.inverseKinematic(P_s[0], P_s[1], P_s[2], roll, pitch, yaw,show_angles=True)
                         q_list.append(q_s)
 
                 q_matrix = np.column_stack(q_list)
 
                 return q_matrix
 
-        def angleConvert (self,angels):
+        def angleConvert (self,angles):
 
                 angles_coverted = []
                 math_offset = 180.0
 
                 for i in range(6):
-                        ang = np.degrees(angels[i]) + math_offset + self.limits_map['offset'][i]
+                        ang = np.degrees(angles[i]) + math_offset + self.limits_map['offset'][i]
                         if ang > self.limits_map['max_angle'][i]:
-                                angles_coverted.append(ang)  
+                                angles_coverted.append(self.limits_map['max_angle'][i])  
                         elif ang < self.limits_map['min_angle'][i]:
-                                angles_coverted.append(ang)
+                                angles_coverted.append(self.limits_map['min_angle'][i])
                         else:
                                 angles_coverted.append(ang)
                         

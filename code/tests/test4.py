@@ -17,9 +17,9 @@ robot = robot6DOF(L_0, L_1, L_2, L_3, L_4, L_5)
 
 # a few examples postions of robot efector
 # 1
-X = 100
-Y = 100
-Z = 100
+X = 120
+Y = 0
+Z = 80
 roll = 180.0
 pitch = 0.0
 yaw = 0.0
@@ -29,40 +29,4 @@ angles = robot.inverseKinematic(X, Y, Z, roll, pitch, yaw, elbow_pos='up')
 print(robot.angleConvert(angles))
 print("\n")
 
-X = 100.0
-Y = 0.0
-Z = 100.0
-roll = 180.0
-pitch = 0.0
-yaw = 0.0
-print(40*'=')
-print('2:')
-angles = robot.inverseKinematic(X, Y, Z, roll, pitch, yaw, elbow_pos='up')
-print(robot.angleConvert(angles))
-print("\n")
 
-
-X = 0.0
-Y = 100.0
-Z = 100.0
-roll = 180.0
-pitch = 0.0
-yaw = 0.0
-print(40*'=')
-print('3:')
-angles = robot.inverseKinematic(X, Y, Z, roll, pitch, yaw, elbow_pos='up')
-print(robot.angleConvert(angles))
-print("\n")
-
-
-X = 0.0
-Y = 150.0
-Z = 100.0
-roll = 180.0
-pitch = 0.0
-yaw = 0.0
-print(40*'=')
-print('4:')
-angles = robot.inverseKinematic(X, Y, Z, roll, pitch, yaw, elbow_pos='up')
-print(robot.angleConvert(angles))
-print("\n")

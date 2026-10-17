@@ -3,7 +3,7 @@ from code.connection import servoConect
 import time
 import threading
 import asyncio
-from ..code.tools.kinematicTools import robot6DOF
+from .tools.kinematicTools import robot6DOF
 
 L_0, L_1, L_2, L_3, L_4, L_5 = 120.925, 54, 93.255, 27, 103.225, 0.0
 robot = robot6DOF(L_0, L_1, L_2, L_3, L_4, L_5)
@@ -114,6 +114,61 @@ async def main(page: ft.Page):
         width = 70
     )
 
+    #-----------------------
+    # Invers kinematic baner
+    #-----------------------
+
+    def sendIK(e):
+            positions = []
+
+            try: 
+                X = float(text_X_pos.value)
+                Y = float(text_Y_pos.value)
+                Z = float(text_Z_pos.value)
+                roll = float(text_roll_pos.value)
+                pitch = float(text_pitch_pos.value)
+                yaw = float(text_yaw_pos.value)
+
+                speed = int(speed_change_text.value)
+                if speed < 0: speed = 0
+                if speed > 4095: speed = 4095
+
+            except(ValueError,TypeError):
+                print('Nie poprawny format danych w IK')
+
+            angles = robot.inverseKinematic(X, Y, Z, roll, pitch, yaw, elbow_pos='up')
+            angles_conv = robot.angleConvert(angles)
+            
+            for idx in range(6):
+                val_deg = angles_conv[idx]
+                        
+                val_mapped = int((val_deg * 4095 )/ 360)
+                
+                positions.append(val_mapped)
+            
+            conn.sendMessage(positions,speed)
+
+    text_X_pos = ft.TextField(label = 'X', width = 70)
+    text_Y_pos = ft.TextField(label = 'Y', width = 70)
+    text_Z_pos = ft.TextField(label = 'Z', width = 70)
+    text_roll_pos = ft.TextField(label = 'roll', width = 70)
+    text_pitch_pos = ft.TextField(label = 'pitch', width = 70)
+    text_yaw_pos = ft.TextField(label = 'yaw', width = 70)
+    btn_IK = ft.Button(content = 'Send', on_click = sendIK)
+
+    IK_baner_column = ft.Column(
+        controls = [
+            text_X_pos,
+            text_Y_pos,
+            text_Z_pos,
+            text_roll_pos,
+            text_pitch_pos,
+            text_yaw_pos,
+            btn_IK
+        ],
+        spacing = 20
+    ) 
+
     """
     ------------------------------------------------------------
     Slabo dziala aktulanie przesyalnie wartosci poprzez slidery.
@@ -175,10 +230,14 @@ async def main(page: ft.Page):
         on_click = closeApp
     )
 
+    #------------
+    # Main widget
+    #------------
+
     main_widget = ft.Column(
         controls=[
             servo_position_input_bar,
-            servo_feadback_baner,
+            ft.Row(controls = [servo_feadback_baner,IK_baner_column]),
             close_app_btn,
             speed_change_text
             ],
