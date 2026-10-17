@@ -3,7 +3,7 @@ import roboticstoolbox as rtb
 from roboticstoolbox.backends.PyPlot import PyPlot
 import matplotlib.pyplot as plt
 from matplotlib.widgets import TextBox, Button
-from kinematicTools import robot6DOF
+from ..tools.kinematicTools import robot6DOF
 
 """
 This test checks for correctness implemented equals of inverse kinematic
@@ -11,7 +11,7 @@ with visualization on simple model of robot arm
 """
 
 # Define robot with RT
-L_0, L_1, L_2, L_3, L_4, L_5 = 0.15, 0.20, 0.15, 0.15, 0.15, 0.05
+L_0, L_1, L_2, L_3, L_4, L_5 = 120.925, 54, 93.255, 27, 103.225, 0.0
 
 robot = rtb.DHRobot([
     rtb.RevoluteDH(d=L_0,      a=0,   alpha=np.pi/2), 

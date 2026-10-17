@@ -8,15 +8,24 @@ class robot6DOF:
         A class used to simulate a robot arm with a specific design derived using the DH method.
         """
 
-        def __init__(self,L_0, L_1, L_2, L_3, L_4, L_5):
+        def __init__(self,L_0, L_1, L_2, L_3, L_4, L_5, limits_map = None):
                 self.L_0 = L_0
                 self.L_1 = L_1
                 self.L_2 = L_2
                 self.L_3 = L_3
                 self.L_4 = L_4
                 self.L_5 = L_5
+                
+                if limits_map == None:
+                        self.limits_map = {
+                                        'min_angle': [ 40, 90, 60,  0, 25,0],
+                                        'max_angle': [320,290,300,360,280,0],
+                                        'offset':    [ -4,  2,  0,-48,-27,0]
+                                        }
+                else:
+                        self.limits_map = limits_map
 
-        def inverseKinematic(self,X,Y,Z,roll,pitch,yaw, elbow_pos:str = 'up', show_angels = True):
+        def inverseKinematic(self,X,Y,Z,roll,pitch,yaw, elbow_pos:str = 'up', show_angles = True):
 
                 """
                 Function for calculating joint angle values ​​based on
@@ -103,7 +112,7 @@ class robot6DOF:
                         phi_3 = np.atan2(-R_3_6[1, 2], -R_3_6[0, 2])
                         phi_5 = np.atan2(-R_3_6[2, 1], R_3_6[2, 0])
                 
-                if show_angels:
+                if show_angles:
                         print(f'Goal position: x: {X}m, y: {Y}, z: {Z}\nroll: {r}, pitch: {p}, yaw: {yaw}')
                         print(f'Phi_0 = {np.degrees(phi_0):.3f}')
                         print(f'Phi_1 = {np.degrees(phi_1):.3f}')
@@ -182,9 +191,26 @@ class robot6DOF:
 
                         roll, pitch, yaw = quaternionToRollPitchYaw(w_s, x_s, y_s, z_s)
 
-                        q_s = self.inverseKinematic(P_s[0], P_s[1], P_s[2], roll, pitch, yaw,show_angels=False)
+                        q_s = self.inverseKinematic(P_s[0], P_s[1], P_s[2], roll, pitch, yaw,show_angels=True)
                         q_list.append(q_s)
 
                 q_matrix = np.column_stack(q_list)
 
                 return q_matrix
+
+        def angleConvert (self,angels):
+
+                angles_coverted = []
+                math_offset = 180.0
+
+                for i in range(6):
+                        ang = np.degrees(angels[i]) + math_offset + self.limits_map['offset'][i]
+                        if ang > self.limits_map['max_angle'][i]:
+                                angles_coverted.append(ang)  
+                        elif ang < self.limits_map['min_angle'][i]:
+                                angles_coverted.append(ang)
+                        else:
+                                angles_coverted.append(ang)
+                        
+
+                return angles_coverted      

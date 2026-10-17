@@ -3,6 +3,10 @@ from code.connection import servoConect
 import time
 import threading
 import asyncio
+from ..code.tools.kinematicTools import robot6DOF
+
+L_0, L_1, L_2, L_3, L_4, L_5 = 120.925, 54, 93.255, 27, 103.225, 0.0
+robot = robot6DOF(L_0, L_1, L_2, L_3, L_4, L_5)
 
 async def main(page: ft.Page):
     
