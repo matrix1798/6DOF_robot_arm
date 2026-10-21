@@ -170,7 +170,11 @@ async def main(page: ft.Page):
         spacing = 20
     ) 
 
-    cont_IK_baner = ft.Container(content=IK_baner_column)
+    cont_IK_baner = ft.Container(
+        content=IK_baner_column,
+        width=300,
+        height=300
+        )
 
     """
     ------------------------------------------------------------
