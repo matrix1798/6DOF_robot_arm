@@ -111,6 +111,7 @@ async def main(page: ft.Page):
 
     speed_change_text = ft.TextField(
         label = 'Predkosc:',
+        value = '200',
         width = 70
     )
 
@@ -156,18 +157,20 @@ async def main(page: ft.Page):
     text_yaw_pos = ft.TextField(label = 'yaw', width = 70)
     btn_IK = ft.Button(content = 'Send', on_click = sendIK)
 
-    IK_baner_column = ft.Column(
+    IK_baner_column = ft.Row(
         controls = [
-            text_X_pos,
+            ft.Column(controls = [text_X_pos,
             text_Y_pos,
-            text_Z_pos,
-            text_roll_pos,
+            text_Z_pos]),
+            ft.Column(controls = [text_roll_pos,
             text_pitch_pos,
-            text_yaw_pos,
+            text_yaw_pos]),
             btn_IK
         ],
         spacing = 20
     ) 
+
+    cont_IK_baner = ft.Container(content=IK_baner_column)
 
     """
     ------------------------------------------------------------
@@ -237,7 +240,7 @@ async def main(page: ft.Page):
     main_widget = ft.Column(
         controls=[
             servo_position_input_bar,
-            ft.Row(controls = [servo_feadback_baner,IK_baner_column]),
+            ft.Row(controls = [servo_feadback_baner,cont_IK_baner]),
             close_app_btn,
             speed_change_text
             ],
@@ -246,6 +249,11 @@ async def main(page: ft.Page):
 
     page.add(main_widget)
 
+
+    #-----------------
+    # Module depends for asynchronic receive feedback data 
+    # from servo controler and print in gui
+    #-----------------
 
     threading.Thread(target=conn.recvFeedback, daemon=True).start()
 
@@ -262,17 +270,6 @@ async def main(page: ft.Page):
                 pos_text[idx].value = f"Pos: {pos_in_angle:.2f} ({conn.pos_array[idx]})"
                 voltage_text[idx].value = f"Volt: {conn.voltage_array[idx]}"
                 current_text[idx].value = f"Current: {conn.current_array[idx]}"
-
-                """
-                ------------------------------
-                Part of disabel slider feature
-                ------------------------------
-                
-                current_pos = int(conn.pos_array[idx])
-                if current_pos != 0:
-                    # Przeliczamy kroki (0-4095) z powrotem na stopnie (0-360) dla suwaka
-                    slider_list[idx].value = (current_pos * 360) / 4095
-                """
                     
             page.update()
             await asyncio.sleep(0.1)

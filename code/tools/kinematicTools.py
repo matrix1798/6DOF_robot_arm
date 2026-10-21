@@ -201,10 +201,35 @@ class robot6DOF:
         def angleConvert (self,angles):
 
                 angles_coverted = []
-                math_offset = 180.0
+                math_offset = [180.0,180,180.0,180.0,180.0,180.0]
+
+                def mapAngle (angle):
+                        return (360 - angle) % 360
+
+                def offsetCord(angle,offset):
+                        return (angle + offset) % 360.0
 
                 for i in range(6):
-                        ang = np.degrees(angles[i]) + math_offset + self.limits_map['offset'][i]
+                        ang = np.degrees(angles[i]) + math_offset[i] 
+
+                        if i == 0:
+                                ang = mapAngle(ang)
+
+                        if i == 1:
+                                ang = offsetCord(ang,-90)
+
+                        if i == 2:
+                                ang = offsetCord(ang,90)
+
+                        if i == 3:
+                                ang = offsetCord(ang,180)
+                                ang = mapAngle(ang)
+                            
+
+                        if i == 4:
+                                ang = mapAngle(ang)
+
+                        ang = ang + self.limits_map['offset'][i]
                         if ang > self.limits_map['max_angle'][i]:
                                 angles_coverted.append(self.limits_map['max_angle'][i])  
                         elif ang < self.limits_map['min_angle'][i]:
