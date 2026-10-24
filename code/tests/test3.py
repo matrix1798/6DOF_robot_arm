@@ -35,11 +35,11 @@ pitch2 = 0
 yaw2 = 0
 P_2 = [X2, Y2, Z2, roll2, pitch2, yaw2]
 
-X3 = 0.0
-Y3 = -100.0
-Z3 = 80.0
-roll3 = 180.0
-pitch3 = 0
+X3 = 190.0
+Y3 = 0.0
+Z3 = 150.0
+roll3 = 0
+pitch3 = 90.0
 yaw3 = 0
 P_3 = [X3, Y3, Z3, roll3, pitch3, yaw3]
 
@@ -49,48 +49,46 @@ P2_to_P3 = robot_6DOF.linearInterpolation(P_2,P_3,100)
 phi_matrix = np.hstack((P1_to_P2,P2_to_P3))
 
 # ==========================================
-# VISUALIZATION (Zoptymalizowany Matplotlib)
+# VISUALIZATION (Custom Matplotlib & Spatialmath)
 # ==========================================
 import matplotlib.pyplot as plt
-import numpy as np
+from spatialmath.base import trplot
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
-# 1. Konfiguracja stałego widoku (wykonana TYLKO RAZ)
-ax.set_xlim([-100, 300])
-ax.set_ylim([-200, 200])
-ax.set_zlim([0, 450])
-ax.set_xlabel('X [mm]')
-ax.set_ylabel('Y [mm]')
-ax.set_zlabel('Z [mm]')
-
-# 2. Inicjalizacja pustych obiektów (które będziemy aktualizować)
-# Wykres ramienia robota:
-robot_line, = ax.plot([], [], [], '-o', color='blue', linewidth=4, markersize=5)
-
-# Pole tekstowe:
-text_box = ax.text2D(0.05, 0.85, "", transform=ax.transAxes, fontsize=11, 
-                     bbox=dict(facecolor='white', alpha=0.8))
-
 for q in phi_matrix.T:
-    # Oblicz transformacje
+    ax.cla()  # Czyszczenie klatki
+    
+    # Oblicz transformacje dla wszystkich członów robota jednocześnie
     T_all = robot.fkine_all(q)
+    
+    # Pobierz współrzędne X, Y, Z wszystkich przegubów (jako tablica Nx3)
     pts = T_all.t 
     
-    # 3. Aktualizacja współrzędnych linii (szkielet robota)
-    robot_line.set_data(pts[:, 0], pts[:, 1])
-    robot_line.set_3d_properties(pts[:, 2])
+    # 1. Narysuj strukturę robota (niebieska linia łącząca przeguby)
+    ax.plot(pts[:, 0], pts[:, 1], pts[:, 2], '-o', color='blue', linewidth=4, markersize=5)
     
-    # 4. Aktualizacja tekstu efektora
+    # 2. Narysuj układy współrzędnych dla każdego przegubu i efektora
+    # length - długość strzałek osi (w mm, dopasuj do robota)
+    for i, T in enumerate(T_all):
+        trplot(T.A, ax=ax, length=40.0, width=1.5, frame=str(i))
+    
+    # 3. Etykieta pozycji efektora (ostatniego elementu)
     x, y, z = T_all[-1].t
-    text_box.set_text(f"Effector:\nX: {x:.3f} mm\nY: {y:.3f} mm\nZ: {z:.3f} mm")
+    ax.text2D(0.05, 0.85, f"Effector:\nX: {x:.3f} mm\nY: {y:.3f} mm\nZ: {z:.3f} mm", 
+              transform=ax.transAxes, fontsize=11, bbox=dict(facecolor='white', alpha=0.8))
     
-    # Wskazówka: trplot jest bardzo wolny do animowania "w locie" w Matplotlib.
-    # Jeśli koniecznie potrzebujesz widzieć układy współrzędnych, 
-    # zrób to korzystając z wbudowanych narzędzi biblioteki (Opcja 2).
+    # 4. Konfiguracja widoku kamery (stałe granice, aby obraz nie drgał)
+    ax.set_xlim([-100, 300])
+    ax.set_ylim([-200, 200])
+    ax.set_zlim([0, 450])
     
-    # Odświeżenie widoku (krótszy czas = szybciej)
-    plt.pause(0.001)
+    # Etykiety głównego układu współrzędnych
+    ax.set_xlabel('X [mm]')
+    ax.set_ylabel('Y [mm]')
+    ax.set_zlabel('Z [mm]')
+    
+    plt.pause(0.01)
 
 plt.show()

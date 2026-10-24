@@ -32,11 +32,11 @@ print("\n")
 
 # a few examples postions of robot efector
 # 2
-X = 100
+X = 160
 Y = 0
-Z = 100
-roll = 180.0
-pitch = 0.0
+Z = 80
+roll = 0.0
+pitch = 90.0
 yaw = 0.0
 print(40*'=')
 print('2. Streightening arm:')

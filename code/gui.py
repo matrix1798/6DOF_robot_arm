@@ -56,6 +56,9 @@ async def main(page: ft.Page):
         
         conn.sendMessage(positions,speed)
         
+    #---------------------------
+    # Set manual servos position
+    #---------------------------
 
     servo_pos_set_baner = []
     for i in range(6):
@@ -75,6 +78,10 @@ async def main(page: ft.Page):
         spacing=10,
         alignment=ft.MainAxisAlignment.CENTER
     )
+
+    #--------------------------------------------
+    # Show feedback data from servo bus controler
+    #--------------------------------------------
 
     temp_text = []
     pos_text = []
@@ -149,6 +156,22 @@ async def main(page: ft.Page):
             
             conn.sendMessage(positions,speed)
 
+    def checkIK(e):
+
+            X = float(text_X_pos.value)
+            Y = float(text_Y_pos.value)
+            Z = float(text_Z_pos.value)
+            roll = float(text_roll_pos.value)
+            pitch = float(text_pitch_pos.value)
+            yaw = float(text_yaw_pos.value)
+
+            angles = robot.inverseKinematic(X, Y, Z, roll, pitch, yaw, elbow_pos='up')
+            angles_conv = robot.angleConvert(angles)
+
+            for i , angle in enumerate(angles_conv):
+                compute_servo_pos_list[i].value = f"Servo {i+1}: {angle:.2f}"
+
+
     text_X_pos = ft.TextField(label = 'X', width = 70)
     text_Y_pos = ft.TextField(label = 'Y', width = 70)
     text_Z_pos = ft.TextField(label = 'Z', width = 70)
@@ -156,24 +179,44 @@ async def main(page: ft.Page):
     text_pitch_pos = ft.TextField(label = 'pitch', width = 70)
     text_yaw_pos = ft.TextField(label = 'yaw', width = 70)
     btn_IK = ft.Button(content = 'Send', on_click = sendIK)
+    btn_check_IK = ft.Button(content='Check', on_click= checkIK)
+
+    compute_servo_pos_list = []
+    for _ in range(6):
+        compute_servo_pos_list.append(ft.Text(value='', color=ft.Colors.BLACK))
 
     IK_baner_column = ft.Row(
         controls = [
-            ft.Column(controls = [text_X_pos,
-            text_Y_pos,
-            text_Z_pos]),
-            ft.Column(controls = [text_roll_pos,
-            text_pitch_pos,
-            text_yaw_pos]),
-            btn_IK
+            ft.Column(
+                controls = [text_X_pos, text_Y_pos,text_Z_pos],
+                alignment= ft.MainAxisAlignment.CENTER,
+                horizontal_alignment= ft.CrossAxisAlignment.CENTER,
+                spacing=10
+                ),
+            ft.Column(
+                controls = [text_roll_pos,text_pitch_pos,text_yaw_pos],
+                alignment= ft.MainAxisAlignment.CENTER,
+                horizontal_alignment= ft.CrossAxisAlignment.CENTER,
+                spacing=10                
+                ),
+            btn_IK,
+            btn_check_IK,
+            ft.Column(
+                controls=compute_servo_pos_list,
+                alignment= ft.MainAxisAlignment.CENTER,
+                horizontal_alignment= ft.CrossAxisAlignment.CENTER,
+                spacing=10  
+            )
         ],
         spacing = 20
     ) 
 
     cont_IK_baner = ft.Container(
         content=IK_baner_column,
-        width=300,
-        height=300
+        width = 600,
+        height = 250,
+        border = ft.Border.all(1,"#172033"),
+        alignment = ft.Alignment.CENTER,
         )
 
     """

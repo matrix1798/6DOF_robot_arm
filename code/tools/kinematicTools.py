@@ -18,9 +18,9 @@ class robot6DOF:
                 
                 if limits_map == None:
                         self.limits_map = {
-                                        'min_angle': [ 40, 90, 60,  0, 25,0],
-                                        'max_angle': [320,290,300,360,280,0],
-                                        'offset':    [ -4,  2,  0,-48,-27,0]
+                                        'min_angle': [ 40, 90, 60,  0, 25,  0],
+                                        'max_angle': [320,290,300,360,280,360],
+                                        'offset':    [ -4,  3,  1,-49,-26,  0]
                                         }
                 else:
                         self.limits_map = limits_map
