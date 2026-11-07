@@ -8,11 +8,13 @@ from .tools.kinematicTools import robot6DOF
 L_0, L_1, L_2, L_3, L_4, L_5 = 120.925, 54, 93.255, 27, 103.225, 0.0
 robot = robot6DOF(L_0, L_1, L_2, L_3, L_4, L_5)
 
+global_pos_X, global_pos_Y, global_pos_Z, global_pos_roll, global_pos_pitch, global_pos_yaw = [0.0 for _ in range(6)]
+
 async def main(page: ft.Page):
     
     page.title = "6DOF robot menager"
-    page.window.width = 800
-    page.window.height = 600
+    page.window.width = 1000
+    page.window.height = 700
     # in new Flet a method window.center() is in asynchronus loop
     await page.window.center()
     page.bgcolor = ft.Colors.WHITE
@@ -137,6 +139,13 @@ async def main(page: ft.Page):
                 pitch = float(text_pitch_pos.value)
                 yaw = float(text_yaw_pos.value)
 
+                global_pos_X = X
+                global_pos_Y = Y
+                global_pos_Z = Z
+                global_pos_roll = roll
+                global_pos_yaw = yaw
+                global_pos_pitch = pitch
+
                 speed = int(speed_change_text.value)
                 if speed < 0: speed = 0
                 if speed > 4095: speed = 4095
@@ -170,7 +179,6 @@ async def main(page: ft.Page):
 
             for i , angle in enumerate(angles_conv):
                 compute_servo_pos_list[i].value = f"Servo {i+1}: {angle:.2f}"
-
 
     text_X_pos = ft.TextField(label = 'X', width = 70)
     text_Y_pos = ft.TextField(label = 'Y', width = 70)
@@ -219,53 +227,72 @@ async def main(page: ft.Page):
         alignment = ft.Alignment.CENTER,
         )
 
-    """
-    ------------------------------------------------------------
-    Slabo dziala aktulanie przesyalnie wartosci poprzez slidery.
-    Działa to ale strasznie szarpie przy zmianie.
-    ------------------------------------------------------------
+    #---------------------------------
+    # Linear intepolation cotrol panel
+    #---------------------------------
 
-    slider_list = []
+    def double_button(axis):
 
-    def changeSlider(e):
-        positions = []
+        def plus_click(e):
+            print(f"{axis}: +")
 
-        for idx in range(6):
-            value = slider_list[idx].value
+        def minus_click(e):
+            print(f"{axis}: -")
 
-            #convert from angel to bit displey 4095/360
+        return ft.Column(
+            controls=[
+                ft.Text(axis, color="#172033"),
 
-            val = int((int(value)*4095)/360)
-
-            val = str(val)
-
-            positions.append(val)
-
-        conn.sendMessage(positions)
-
-        # DODANE: Zaktualizuj suwaki, żeby 'nie zostały w tyle' za polami tekstowymi!
-        for idx in range(6):
-            slider_list[idx].value = (int(positions[idx]) * 360) / 4095
-            
-        page.update()
-
-    for i in range(1,7,1):
-        slider = ft.Slider(
-            min = 0,
-            max = 360,
-            value = 180,
-            label = f"Id: {i} " + "{value}",
-            width = 800,
-            divisions = 360,
-            on_change = changeSlider
+                ft.Container(
+                    width=65,
+                    content=ft.Column(
+                        controls=[
+                            ft.Button(
+                                content="+",
+                                width=63,
+                                height=42,
+                                on_click=plus_click,
+                            ),
+                            ft.Button(
+                                content="−",
+                                width=63,
+                                height=42,
+                                on_click=minus_click,
+                            ),
+                        ],
+                        spacing=0,
+                        tight=True,
+                    ),
+                ),
+            ],
+            spacing=5,
+            horizontal_alignment= ft.CrossAxisAlignment.CENTER,
+            tight=True
         )
 
-        slider_list.append(slider)
+    global_pos_baner = [
+        ft.Text(value=f"{global_pos_X}", color = ft.Colors.BLACK),
+        ft.Text(value=f"{global_pos_Y}", color = ft.Colors.BLACK),
+        ft.Text(value=f"{global_pos_Z}", color = ft.Colors.BLACK),
+        ft.Text(value=f"{global_pos_roll}", color = ft.Colors.BLACK),
+        ft.Text(value=f"{global_pos_pitch}", color = ft.Colors.BLACK),
+        ft.Text(value=f"{global_pos_roll}", color = ft.Colors.BLACK)
+    ]
 
-    sliders_bar = ft.Column(
-        controls = slider_list
+
+    axis = ["X","Y","Z","roll","pitch","yaw",]
+
+    cont_control_panel = ft.Container(
+        content=ft.Column(controls=
+            [ft.Row(controls= [double_button(axi) for axi in axis], spacing=10),
+            ft.Row(controls= global_pos_baner, spacing=10)]
+        ),
+        width = 600,
+        height = 200,
+        border = ft.Border.all(1,"#172033"),
+        alignment= ft.Alignment.CENTER
     )
-    """
+
     #--------------------
     # turn off app button
     #--------------------
@@ -288,7 +315,7 @@ async def main(page: ft.Page):
         controls=[
             servo_position_input_bar,
             ft.Row(controls = [servo_feadback_baner,cont_IK_baner]),
-            close_app_btn,
+            ft.Row(controls= [close_app_btn, cont_control_panel]),
             speed_change_text
             ],
         alignment = ft.MainAxisAlignment.CENTER

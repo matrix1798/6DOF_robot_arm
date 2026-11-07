@@ -18,12 +18,51 @@ class robot6DOF:
                 
                 if limits_map == None:
                         self.limits_map = {
-                                        'min_angle': [ 40, 90, 60,  0, 25,  0],
-                                        'max_angle': [320,290,300,360,280,360],
-                                        'offset':    [ -4,  3,  1,-49,-26,  0]
+                                        'min_angle': [ 40.0,  90.0,  60.0,   0.0,  25.0,   0.0],
+                                        'max_angle': [320.0, 290.0, 300.0, 360.0, 280.0, 360.0],
+                                        'offset':    [ -4.0,   3.0,   1.0, -42.0, -26.0,   0.0],
+                                        'dh_zero':   [  0.0,  90.0, -90.0, 180.0,  0.0,    0.0],
+                                        'direction': [   -1,     1,     1,     -1,   -1,     1]
                                         }
                 else:
                         self.limits_map = limits_map
+
+        def forwardKinematic(self,angles):
+                """
+                Function fro calculating position and orientation of effecter based
+                on angles in joints with use DH method
+                """
+
+                X = 0.0
+                Y = 0.0
+                Z = 0.0
+                roll = 0.0
+                pitch = 0.0
+                yaw = 0.0
+
+                DHtable = [[angles[0],           self.L_0,         0,  np.pi/2],
+                           [angles[1],                   0, self.L_1,        0],
+                           [angles[2],                   0,        0, -np.pi/2],
+                           [angles[3], self.L_2 + self.L_3,        0,  np.pi/2],
+                           [angles[4],                   0,        0, -np.pi/2],
+                           [angles[5], self.L_4 + self.L_5,        0,        0]]
+
+                H_mat_result = mt.DHmatrix(*DHtable[0])
+
+                for i in range(1,6):
+                        H_mat_result = H_mat_result @ mt.DHmatrix(*DHtable[i])
+
+                X = H_mat_result[0,3]
+                Y = H_mat_result[1,3]
+                Z = H_mat_result[2,3]                
+                
+                roll = np.atan2(H_mat_result[2,1], H_mat_result[2,2])
+                pitch = np.arcsin(-1 *  H_mat_result[2,0])
+                yaw = np.atan2(H_mat_result[1,0], H_mat_result[0,0])
+
+                return X, Y, Z, roll, pitch, yaw
+
+
 
         def inverseKinematic(self,X,Y,Z,roll,pitch,yaw, elbow_pos:str = 'up', show_angles = True):
 
@@ -113,7 +152,7 @@ class robot6DOF:
                         phi_5 = np.atan2(-R_3_6[2, 1], R_3_6[2, 0])
                 
                 if show_angles:
-                        print(f'Goal position: x: {X}m, y: {Y}, z: {Z}\nroll: {r}, pitch: {p}, yaw: {yaw}')
+                        print(f'Goal position: x: {X}, y: {Y}, z: {Z}\nroll: {r}, pitch: {p}, yaw: {yaw}')
                         print(f'Phi_0 = {np.degrees(phi_0):.3f}')
                         print(f'Phi_1 = {np.degrees(phi_1):.3f}')
                         print(f'Phi_2 = {np.degrees(phi_2):.3f}')
@@ -201,41 +240,23 @@ class robot6DOF:
         def angleConvert (self,angles):
 
                 angles_coverted = []
-                math_offset = [180.0,180,180.0,180.0,180.0,180.0]
-
-                def mapAngle (angle):
-                        return (360 - angle) % 360
-
-                def offsetCord(angle,offset):
-                        return (angle + offset) % 360.0
 
                 for i in range(6):
-                        ang = np.degrees(angles[i]) + math_offset[i] 
+                        angle_IK = np.degrees(angles[i]) 
+                        max_angle = self.limits_map['max_angle'][i]
+                        min_angle = self.limits_map['min_angle'][i]
+                        mech_offset = self.limits_map['offset'][i]
+                        dh_offset = self.limits_map['dh_zero'][i]
+                        direction = self.limits_map['direction'][i]
 
-                        if i == 0:
-                                ang = mapAngle(ang)
+                        delta_phi = ((angle_IK - dh_offset + 180.0) % 360.0) - 180.0
+                        angle_convert = 180.8 + direction*delta_phi + mech_offset
 
-                        if i == 1:
-                                ang = offsetCord(ang,-90)
+                        if angle_convert > max_angle:
+                                angle_convert = max_angle
+                        elif angle_convert < min_angle:
+                                angle_convert = min_angle
 
-                        if i == 2:
-                                ang = offsetCord(ang,90)
-
-                        if i == 3:
-                                ang = offsetCord(ang,180)
-                                ang = mapAngle(ang)
-                            
-
-                        if i == 4:
-                                ang = mapAngle(ang)
-
-                        ang = ang + self.limits_map['offset'][i]
-                        if ang > self.limits_map['max_angle'][i]:
-                                angles_coverted.append(self.limits_map['max_angle'][i])  
-                        elif ang < self.limits_map['min_angle'][i]:
-                                angles_coverted.append(self.limits_map['min_angle'][i])
-                        else:
-                                angles_coverted.append(ang)
-                        
+                        angles_coverted.append(angle_convert)
 
                 return angles_coverted      

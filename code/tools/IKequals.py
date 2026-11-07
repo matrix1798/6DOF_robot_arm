@@ -89,3 +89,15 @@ print('y = ',end='')
 sp.pprint(y_equal_4_6)
 print('z = ',end='')
 sp.pprint(z_equal_4_6)
+
+x_equal_0_6 = mat_rot_0_6[0,3]
+y_equal_0_6 = mat_rot_0_6[1,3]
+z_equal_0_6 = mat_rot_0_6[2,3]
+
+print('IK dla 0-6 złacz:')
+print('x = ',end='')
+sp.pprint(x_equal_0_6)
+print('y = ',end='')
+sp.pprint(y_equal_0_6)
+print('z = ',end='')
+sp.pprint(z_equal_0_6)
