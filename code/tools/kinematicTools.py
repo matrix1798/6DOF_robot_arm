@@ -162,18 +162,37 @@ class robot6DOF:
 
                 return [phi_0, phi_1, phi_2, phi_3, phi_4, phi_5]
 
-        @classmethod
-        def axialInterpolation(cls,start_phi,stop_phi,accuracy):
+        def axialInterpolation(self, P_start:list, P_goal:list, accuracy, max_v, max_a = None):
 
-                phi_list = []
+                """
+                Input:
+                P_start  - value of start position of effector
+                P_goal   - value of goal position of effector
+                accuracy - number of steps between start and goal position of each joint
+                max_v    - max velocity of each servo [rad/s]
 
-                for i in range(len(start_phi)):
-                        phi_vec = np.linspace(start_phi[i],stop_phi[i],accuracy)
-                        phi_list.append(phi_vec)
+                """
 
-                phi_matrix = np.column_stack(phi_list)
-                
-                return phi_matrix
+                start_phi = self.inverseKinematic(*P_start, show_angles=False)
+                goal_phi = self.inverseKinematic(*P_goal, show_angles=False)
+
+                dif_phi = np.array(start_phi) - np.array(goal_phi)
+                abs_dif_phi = np.abs(dif_phi)
+
+                idx = np.argmax(abs_dif_phi)
+
+                if abs_dif_phi[idx] < 1e-3:
+                        return [0.0] * 6, goal_phi
+
+                time_total = abs_dif_phi[idx] / max_v
+
+                # we have to calculate new speed for each joint
+                new_speed_list = []
+                for i in range(6):
+                        new_speed = abs_dif_phi[i]/time_total
+                        new_speed_list.append(new_speed)
+
+                return new_speed_list, goal_phi
 
         def linearInterpolation(self, P_start:list, P_goal:list, accuracy):
                 """
