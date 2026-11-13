@@ -35,11 +35,11 @@ pitch2 = 0
 yaw2 = 0
 P_2 = [X2, Y2, Z2, roll2, pitch2, yaw2]
 
-X3 = 190.0
+X3 = 100
 Y3 = 0.0
-Z3 = 150.0
-roll3 = 0
-pitch3 = 90.0
+Z3 = 100
+roll3 = 180.0
+pitch3 = 0
 yaw3 = 0
 P_3 = [X3, Y3, Z3, roll3, pitch3, yaw3]
 

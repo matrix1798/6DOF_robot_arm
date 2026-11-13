@@ -40,12 +40,12 @@ print(40*'=')
 print('3:')
 robot.inverseKinematic(X, Y, Z, roll, pitch, yaw, elbow_pos='up')
 
-X = 0.0
-Y = 150.0
-Z = 100.0
+X = 87
+Y = 147
+Z = 49
 roll = 180.0
-pitch = 0.0
-yaw = 0.0
+pitch = 7.0
+yaw = 69.0
 print(40*'=')
 print('4:')
 robot.inverseKinematic(X, Y, Z, roll, pitch, yaw, elbow_pos='up')
