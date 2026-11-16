@@ -13,11 +13,13 @@ global_pos_X, global_pos_Y, global_pos_Z, global_pos_roll, global_pos_pitch, glo
 async def main(page: ft.Page):
     
     page.title = "6DOF robot menager"
-    page.window.width = 1000
+    page.window.width = 1400
     page.window.height = 700
     # in new Flet a method window.center() is in asynchronus loop
     await page.window.center()
     page.bgcolor = ft.Colors.WHITE
+    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+    page.vertical_alignment = ft.MainAxisAlignment.CENTER
 
     try:
         conn = servoConect()
@@ -81,6 +83,14 @@ async def main(page: ft.Page):
         alignment=ft.MainAxisAlignment.CENTER
     )
 
+    cont_servo_position = ft.Container(
+        content=servo_position_input_bar,
+        width=1340,
+        height=70,
+        border=ft.Border.all(1, "#172033"),
+        alignment=ft.Alignment.CENTER
+    )
+
     #--------------------------------------------
     # Show feedback data from servo bus controler
     #--------------------------------------------
@@ -115,13 +125,25 @@ async def main(page: ft.Page):
 
         servo_feadback = ft.Row(
             controls=[name,temp,pos,voltage,current,move,load,speed],
-            spacing= 20
+            spacing= 20,
+            alignment=ft.MainAxisAlignment.CENTER
             )
         servo_feadback_value_lines.append(servo_feadback)
 
     servo_feadback_baner = ft.Column(
         controls=servo_feadback_value_lines,
-        spacing=20
+        spacing=12,
+        alignment=ft.MainAxisAlignment.CENTER,
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER
+    )
+
+    cont_feedback_baner = ft.Container(
+        content=servo_feadback_baner,
+        width=720,
+        height=250,
+        border=ft.Border.all(1, "#172033"),
+        alignment=ft.Alignment.CENTER,
+        padding=10
     )
 
     #------------------------------
@@ -131,7 +153,7 @@ async def main(page: ft.Page):
     speed_change_text = ft.TextField(
         label = 'Predkosc:',
         value = '200',
-        width = 70
+        width = 200
     )
 
     #-----------------------
@@ -226,7 +248,9 @@ async def main(page: ft.Page):
                 spacing=10  
             )
         ],
-        spacing = 20
+        spacing = 20,
+        alignment=ft.MainAxisAlignment.CENTER,
+        vertical_alignment=ft.CrossAxisAlignment.CENTER
     ) 
 
     cont_IK_baner = ft.Container(
@@ -281,21 +305,26 @@ async def main(page: ft.Page):
         )
 
     global_pos_baner = [
-        ft.Text(value=f"{global_pos_X}", color = ft.Colors.BLACK),
-        ft.Text(value=f"{global_pos_Y}", color = ft.Colors.BLACK),
-        ft.Text(value=f"{global_pos_Z}", color = ft.Colors.BLACK),
-        ft.Text(value=f"{global_pos_roll}", color = ft.Colors.BLACK),
-        ft.Text(value=f"{global_pos_pitch}", color = ft.Colors.BLACK),
-        ft.Text(value=f"{global_pos_roll}", color = ft.Colors.BLACK)
+        ft.Text(value=f"{global_pos_X}", color = ft.Colors.BLACK, width=65, text_align=ft.TextAlign.CENTER),
+        ft.Text(value=f"{global_pos_Y}", color = ft.Colors.BLACK, width=65, text_align=ft.TextAlign.CENTER),
+        ft.Text(value=f"{global_pos_Z}", color = ft.Colors.BLACK, width=65, text_align=ft.TextAlign.CENTER),
+        ft.Text(value=f"{global_pos_roll}", color = ft.Colors.BLACK, width=65, text_align=ft.TextAlign.CENTER),
+        ft.Text(value=f"{global_pos_pitch}", color = ft.Colors.BLACK, width=65, text_align=ft.TextAlign.CENTER),
+        ft.Text(value=f"{global_pos_roll}", color = ft.Colors.BLACK, width=65, text_align=ft.TextAlign.CENTER)
     ]
 
 
     axis = ["X","Y","Z","roll","pitch","yaw",]
 
     cont_control_panel = ft.Container(
-        content=ft.Column(controls=
-            [ft.Row(controls= [double_button(axi) for axi in axis], spacing=10),
-            ft.Row(controls= global_pos_baner, spacing=10)]
+        content=ft.Column(
+            controls=[
+                ft.Row(controls= [double_button(axi) for axi in axis], spacing=10, alignment=ft.MainAxisAlignment.CENTER),
+                ft.Row(controls= global_pos_baner, spacing=10, alignment=ft.MainAxisAlignment.CENTER)
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            spacing=10
         ),
         width = 600,
         height = 200,
@@ -314,7 +343,23 @@ async def main(page: ft.Page):
         content = "Zamknij program.",
         icon = ft.Icons.CLOSE,
         icon_color = ft.Colors.RED,
-        on_click = closeApp
+        on_click = closeApp,
+        width = 200
+    )
+
+    bottom_left_panel = ft.Container(
+        content=ft.Column(
+            controls=[
+                speed_change_text,
+                close_app_btn
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            spacing=20
+        ),
+        width=720,
+        height=200,
+        alignment=ft.Alignment.CENTER
     )
 
     #------------
@@ -323,13 +368,22 @@ async def main(page: ft.Page):
 
     main_widget = ft.Column(
         controls=[
-            servo_position_input_bar,
-            ft.Row(controls = [servo_feadback_baner,cont_IK_baner]),
-            ft.Row(controls= [close_app_btn, cont_control_panel]),
-            speed_change_text
-            ],
-        alignment = ft.MainAxisAlignment.CENTER
-        )
+            cont_servo_position,
+            ft.Row(
+                controls=[cont_feedback_baner, cont_IK_baner],
+                spacing=20,
+                alignment=ft.MainAxisAlignment.CENTER
+            ),
+            ft.Row(
+                controls=[bottom_left_panel, cont_control_panel],
+                spacing=20,
+                alignment=ft.MainAxisAlignment.CENTER
+            )
+        ],
+        alignment=ft.MainAxisAlignment.CENTER,
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        spacing=20
+    )
 
     page.add(main_widget)
 
