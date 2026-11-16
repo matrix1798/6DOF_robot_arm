@@ -186,7 +186,6 @@ class robot6DOF:
 
                 time_total = abs_dif_phi[idx] / max_v
 
-                # we have to calculate new speed for each joint
                 new_speed_list = []
                 for i in range(6):
                         new_speed = abs_dif_phi[i]/time_total

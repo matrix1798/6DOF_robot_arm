@@ -34,6 +34,9 @@ class servoConect:
         self.temp_array = [0,0,0,0,0,0]
         self.voltage_array = [0,0,0,0,0,0]
         self.current_array = [0,0,0,0,0,0]
+        self.move_array = [0,0,0,0,0,0]
+        self.load_array = [0,0,0,0,0,0]
+        self.speed_array = [0,0,0,0,0,0]
         
     def recvFeedback(self):
         if self.servo_driver is None:
@@ -63,6 +66,10 @@ class servoConect:
                             self.temp_array[id] = feedback[2]
                             self.voltage_array[id] = feedback[3]
                             self.current_array[id] = feedback[4]
+                            self.move_array[id] = feedback[5]
+                            self.load_array[id] = feedback[6]
+                            self.speed_array[id] = feedback[7]
+
                 else:
                     time.sleep(0.05)
 

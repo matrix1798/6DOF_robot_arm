@@ -17,17 +17,23 @@ int16_t pos_array[NUM_SERVOS] = {0,0,0,0,0,0};
 uint16_t spd_array[NUM_SERVOS];
 byte acc_array[NUM_SERVOS];
 
-int speed;
+int speed_servo;
 
 //feedback data
 int pos;
 int voltage;
 int temper;
 int current;
+int move;
+int load;
+int speed;
 int16_t pos_feed_array[NUM_SERVOS];
 int16_t voltage_feed_array[NUM_SERVOS];
 int16_t temper_feed_array[NUM_SERVOS];
 int16_t current_feed_array[NUM_SERVOS];
+int16_t move_feed_array[NUM_SERVOS];
+int16_t load_feed_array[NUM_SERVOS];
+int16_t speed_feed_array[NUM_SERVOS];
 
 // variable to recv data
 const byte num_chars = 64;
@@ -77,6 +83,9 @@ void loop() {
       voltage_feed_array[i] = Servo_ST.ReadVoltage(id);
       temper_feed_array[i] = Servo_ST.ReadTemper(id);
       current_feed_array[i] = Servo_ST.ReadCurrent(id);
+      move_feed_array[i] = Servo_ST.ReadMove(id);
+      load_feed_array[i] = Servo_ST.ReadLoad(id);
+      speed_feed_array[i] = Servo_ST.ReadSpeed(id);
     }
   }
 
@@ -135,7 +144,7 @@ void sendMessage() {
   char message[600] = "<";
   for (int i = 0; i < NUM_SERVOS; i++){
     int id = id_array[i];
-    sprintf(mesg_part, "%d, %d, %d, %d, %d; ", id, pos_feed_array[i],temper_feed_array[i], voltage_feed_array[i],  current_feed_array[i]);
+    sprintf(mesg_part, "%d, %d, %d, %d, %d, %d, %d, %d; ", id, pos_feed_array[i], temper_feed_array[i], voltage_feed_array[i], current_feed_array[i], move_feed_array[i], load_feed_array[i], speed_feed_array[i]);
     strcat(message, mesg_part);
   }
 
@@ -151,11 +160,11 @@ void convertData() {
 
   strtok_indx = strtok(received_chars, "|");
   if (strtok_indx != NULL){ 
-    speed = atoi(strtok_indx);
+    speed_servo = atoi(strtok_indx);
   }
 
   for(int i = 0; i < NUM_SERVOS; i++){
-    spd_array[i] = speed;
+    spd_array[i] = speed_servo;
   }
 
   strtok_indx = strtok(NULL, ",");

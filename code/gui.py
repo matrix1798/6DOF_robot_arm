@@ -89,6 +89,9 @@ async def main(page: ft.Page):
     pos_text = []
     voltage_text = []
     current_text = []
+    move_text = []
+    load_text = []
+    speed_text = []
 
     servo_feadback_value_lines = []
     for idx in range(6):
@@ -97,14 +100,21 @@ async def main(page: ft.Page):
         pos = ft.Text(value=f"Pozycja serva {conn.pos_array[idx]}", color = ft.Colors.BLACK)
         voltage = ft.Text(value=f"", color = ft.Colors.BLACK)
         current = ft.Text(value=f"", color = ft.Colors.BLACK)
+        move = ft.Text(value=f"", color = ft.Colors.BLACK)
+        load = ft.Text(value=f"", color = ft.Colors.BLACK)
+        speed = ft.Text(value=f"", color = ft.Colors.BLACK)
+        
 
         pos_text.append(pos)
         temp_text.append(temp)
         voltage_text.append(voltage)
         current_text.append(current)
+        move_text.append(move)
+        load_text.append(load)
+        speed_text.append(speed)
 
         servo_feadback = ft.Row(
-            controls=[name,temp,pos,voltage,current],
+            controls=[name,temp,pos,voltage,current,move,load,speed],
             spacing= 20
             )
         servo_feadback_value_lines.append(servo_feadback)
@@ -344,6 +354,9 @@ async def main(page: ft.Page):
                 pos_text[idx].value = f"Pos: {pos_in_angle:.2f} ({conn.pos_array[idx]})"
                 voltage_text[idx].value = f"Volt: {conn.voltage_array[idx]}"
                 current_text[idx].value = f"Current: {conn.current_array[idx]}"
+                move_text[idx].value = f"Move: {conn.move_array[idx]}"
+                load_text[idx].value = f"Load: {conn.load_array[idx]}"
+                speed_text[idx].value = f"Speed: {conn.speed_array[idx]}"
                     
             page.update()
             await asyncio.sleep(0.1)
