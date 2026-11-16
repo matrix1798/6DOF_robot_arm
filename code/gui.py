@@ -1,9 +1,10 @@
 import flet as ft
-from code.connection import servoConect
 import time
 import threading
 import asyncio
+import numpy as np
 from .tools.kinematicTools import robot6DOF
+from code.connection import servoConect
 
 L_0, L_1, L_2, L_3, L_4, L_5 = 120.925, 54, 93.255, 27, 103.225, 0.0
 robot = robot6DOF(L_0, L_1, L_2, L_3, L_4, L_5)
@@ -83,10 +84,50 @@ async def main(page: ft.Page):
         alignment=ft.MainAxisAlignment.CENTER
     )
 
+    effector_pos_X = ft.Text(value="X: 0.0", color=ft.Colors.BLACK)
+    effector_pos_Y = ft.Text(value="Y: 0.0", color=ft.Colors.BLACK)
+    effector_pos_Z = ft.Text(value="Z: 0.0", color=ft.Colors.BLACK)
+    effector_pos_p = ft.Text(value="pitch: 0.0", color=ft.Colors.BLACK)
+    effector_pos_r = ft.Text(value="roll: 0.0", color=ft.Colors.BLACK)
+    effector_pos_y = ft.Text(value="yaw: 0.0", color=ft.Colors.BLACK)
+
+    effector_pos_panel = ft.Container(
+        content=ft.Row(
+            controls=[
+                ft.Column(
+                    controls=[effector_pos_X, effector_pos_Y, effector_pos_Z],
+                    spacing=2,
+                    alignment=ft.MainAxisAlignment.CENTER,
+                    horizontal_alignment=ft.CrossAxisAlignment.START
+                ),
+                ft.Column(
+                    controls=[effector_pos_p, effector_pos_r, effector_pos_y],
+                    spacing=2,
+                    alignment=ft.MainAxisAlignment.CENTER,
+                    horizontal_alignment=ft.CrossAxisAlignment.START
+                )
+            ],
+            spacing=15,
+            alignment=ft.MainAxisAlignment.CENTER,
+            vertical_alignment=ft.CrossAxisAlignment.CENTER
+        ),
+        border=ft.Border.all(1, "#172033"),
+        padding=10,
+        alignment=ft.Alignment.CENTER
+    )
+
     cont_servo_position = ft.Container(
-        content=servo_position_input_bar,
+        content=ft.Row(
+            controls=[
+                servo_position_input_bar,
+                effector_pos_panel
+            ],
+            spacing=30,
+            alignment=ft.MainAxisAlignment.CENTER,
+            vertical_alignment=ft.CrossAxisAlignment.CENTER
+        ),
         width=1340,
-        height=70,
+        height=90,
         border=ft.Border.all(1, "#172033"),
         alignment=ft.Alignment.CENTER
     )
@@ -398,11 +439,16 @@ async def main(page: ft.Page):
     async def update_gui():
 
         while True:
+
+            angles = np.zeros(6)
+
             for idx in range(6):
 
                 pos_in_angle = int(conn.pos_array[idx])
 
                 pos_in_angle = pos_in_angle/4095 * 360
+
+                angles[idx] = np.radians(pos_in_angle)
 
                 temp_text[idx].value = f"Temp: {conn.temp_array[idx]}"
                 pos_text[idx].value = f"Pos: {pos_in_angle:.2f} ({conn.pos_array[idx]})"
@@ -411,7 +457,17 @@ async def main(page: ft.Page):
                 move_text[idx].value = f"Move: {conn.move_array[idx]}"
                 load_text[idx].value = f"Load: {conn.load_array[idx]}"
                 speed_text[idx].value = f"Speed: {conn.speed_array[idx]}"
-                    
+
+            # update position of efektor based on FK algorithm
+            X, Y, Z, roll, pitch, yaw = robot.forwardKinematic(angles)
+
+            effector_pos_X.value = f"X: {X:.3f}"
+            effector_pos_Y.value = f"Y: {Y:.3f}"
+            effector_pos_Z.value = f"Z: {Z:.3f}"
+            effector_pos_r.value = f"roll: {roll:.2f}"
+            effector_pos_p.value = f"pitch: {pitch:.2f}"
+            effector_pos_y.value = f"yaw: {yaw:.2f}"
+
             page.update()
             await asyncio.sleep(0.1)
 
