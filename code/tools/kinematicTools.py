@@ -255,7 +255,11 @@ class robot6DOF:
 
                 return q_matrix
 
-        def angleConvert (self,angles):
+        def angleConvertToRealModel (self,angles):
+
+                """
+                This function convert angles from math kinematic model to real robot model.
+                """
 
                 angles_coverted = []
 
@@ -277,4 +281,26 @@ class robot6DOF:
 
                         angles_coverted.append(angle_convert)
 
-                return angles_coverted      
+                return angles_coverted
+
+        def angleConvertToMathModel(self, angles):
+
+                """
+                This function convert angles from real model of robot to kinematic math model.
+                """
+
+                angles_converted = []
+
+                for i in range(6):
+                        servo_angle = float(angles[i])
+                        mech_offset = self.limits_map['offset'][i]
+                        dh_offset = self.limits_map['dh_zero'][i]
+                        direction = self.limits_map['direction'][i]
+
+                        delta_phi = (servo_angle - 180.8 - mech_offset) / direction
+                        angle_math_deg = ((delta_phi + dh_offset + 180.0) % 360.0) - 180.0
+                        angle_math_rad = np.radians(angle_math_deg)
+
+                        angles_converted.append(angle_math_rad)
+
+                return angles_converted

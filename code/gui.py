@@ -101,7 +101,7 @@ async def main(page: ft.Page):
                     horizontal_alignment=ft.CrossAxisAlignment.START
                 ),
                 ft.Column(
-                    controls=[effector_pos_p, effector_pos_r, effector_pos_y],
+                    controls=[ effector_pos_r, effector_pos_p, effector_pos_y],
                     spacing=2,
                     alignment=ft.MainAxisAlignment.CENTER,
                     horizontal_alignment=ft.CrossAxisAlignment.START
@@ -227,7 +227,7 @@ async def main(page: ft.Page):
                 print('Nie poprawny format danych w IK')
 
             angles = robot.inverseKinematic(X, Y, Z, roll, pitch, yaw, elbow_pos='up')
-            angles_conv = robot.angleConvert(angles)
+            angles_conv = robot.angleConvertToRealModel(angles)
             
             for idx in range(6):
                 val_deg = angles_conv[idx]
@@ -248,7 +248,7 @@ async def main(page: ft.Page):
             yaw = float(text_yaw_pos.value)
 
             angles = robot.inverseKinematic(X, Y, Z, roll, pitch, yaw, elbow_pos='up')
-            angles_conv = robot.angleConvert(angles)
+            angles_conv = robot.angleConvertToRealModel(angles)
 
             for i , angle in enumerate(angles_conv):
                 compute_servo_pos_list[i].value = f"Servo {i+1}: {angle:.2f}"
@@ -448,7 +448,7 @@ async def main(page: ft.Page):
 
                 pos_in_angle = pos_in_angle/4095 * 360
 
-                angles[idx] = np.radians(pos_in_angle)
+                angles[idx] = pos_in_angle
 
                 temp_text[idx].value = f"Temp: {conn.temp_array[idx]}"
                 pos_text[idx].value = f"Pos: {pos_in_angle:.2f} ({conn.pos_array[idx]})"
@@ -459,7 +459,10 @@ async def main(page: ft.Page):
                 speed_text[idx].value = f"Speed: {conn.speed_array[idx]}"
 
             # update position of efektor based on FK algorithm
-            X, Y, Z, roll, pitch, yaw = robot.forwardKinematic(angles)
+
+            angles_converted = robot.angleConvertToMathModel(angles)
+
+            X, Y, Z, roll, pitch, yaw = robot.forwardKinematic(angles_converted)
 
             effector_pos_X.value = f"X: {X:.3f}"
             effector_pos_Y.value = f"Y: {Y:.3f}"
