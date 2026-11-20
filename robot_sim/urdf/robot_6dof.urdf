@@ -1,0 +1,206 @@
+<?xml version="1.0"?>
+<robot name="robot_6dof">
+
+  <link name="world"/>
+  <!-- Przykręcenie bazy robota do świata na sztywno -->
+  <joint name="world_to_base" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- 1. Baza robota -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <mesh filename="../meshes/base_link.stl"/> 
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="../meshes/base_link.stl"/> 
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Joint 1: Global Z = 0.15 m -->
+  <joint name="joint_1" type="revolute">
+    <parent link="base_link"/>
+    <child link="arm_1"/>
+    <origin xyz="0 0 0.15" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-3.14159265359" upper="3.14159265359" effort="10.0" velocity="1.0"/>
+  </joint>
+
+  <!-- 2. Ramię 1 -->
+  <link name="arm_1">
+    <inertial>
+      <mass value="1.0" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -0.15" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="../meshes/arm_1.stl"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.15" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="../meshes/arm_1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Joint 2: L_0 = 120.925 mm -> Global Z = 0.120925 m (0.15 - 0.029075) -->
+  <joint name="joint_2" type="revolute">
+    <parent link="arm_1"/>
+    <child link="arm_2"/>
+    <origin xyz="0 0 -0.029075" rpy="0 1.57079632679 0"/>
+    <axis xyz="0 -1 0"/>
+    <limit lower="-3.14159265359" upper="3.14159265359" effort="10.0" velocity="1.0"/>
+  </joint>
+
+  <!-- 3. Ramię 2 -->
+  <link name="arm_2">
+    <inertial>
+      <mass value="1.0" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -0.120925" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="../meshes/arm_2.stl"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.120925" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="../meshes/arm_2.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Joint 3: L_1 = 54.0 mm -> Global Z = 0.174925 m (0.120925 + 0.054) -->
+  <joint name="joint_3" type="revolute">
+    <parent link="arm_2"/>
+    <child link="arm_3"/>
+    <origin xyz="0 0 0.054" rpy="0 -1.57079632679 0"/>
+    <axis xyz="0 -1 0"/>
+    <limit lower="-3.14159265359" upper="3.14159265359" effort="10.0" velocity="1.0"/>
+  </joint>
+
+  <!-- 4. Ramię 3 -->
+  <link name="arm_3">
+    <inertial>
+      <mass value="1.0" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -0.174925" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="../meshes/arm_3.stl"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.174925" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="../meshes/arm_3.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Joint 4: L_2 = 93.255 mm -> Global Z = 0.268180 m (0.174925 + 0.093255) -->
+  <joint name="joint_4" type="revolute">
+    <parent link="arm_3"/>
+    <child link="arm_4"/>
+    <origin xyz="0 0 0.093255" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-3.14159265359" upper="3.14159265359" effort="10.0" velocity="1.0"/>
+  </joint>
+
+  <!-- 5. Ramię 4 -->
+  <link name="arm_4">
+    <inertial>
+      <mass value="1.0" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -0.26818" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="../meshes/arm_4.stl"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.26818" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="../meshes/arm_4.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Joint 5: L_3 = 27.0 mm -> Global Z = 0.295180 m (0.268180 + 0.027) -->
+  <joint name="joint_5" type="revolute">
+    <parent link="arm_4"/>
+    <child link="arm_5"/>
+    <origin xyz="0 0 0.027" rpy="0 0 0"/>
+    <axis xyz="0 -1 0"/>
+    <limit lower="-3.14159265359" upper="3.14159265359" effort="10.0" velocity="1.0"/>
+  </joint>
+
+  <!-- 6. Ramię 5 -->
+  <link name="arm_5">
+    <inertial>
+      <mass value="1.0" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -0.29518" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="../meshes/arm_5.stl"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.29518" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="../meshes/arm_5.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Joint 6: L_4 = 93.225 mm -> Global Z = 0.388405 m (0.295180 + 0.093225) -->
+  <joint name="joint_6" type="revolute">
+    <parent link="arm_5"/>
+    <child link="flange"/>
+    <origin xyz="0 0 0.093225" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-3.14159265359" upper="3.14159265359" effort="10.0" velocity="1.0"/>
+  </joint>
+
+  <!-- 7. Kołnierz (Flange) -->
+  <link name="flange">
+    <inertial>
+      <mass value="1.0" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -0.388405" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="../meshes/flange.stl"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.388405" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="../meshes/flange.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+</robot>

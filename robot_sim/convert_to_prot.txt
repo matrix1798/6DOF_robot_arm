@@ -1,0 +1,1 @@
+python -m urdf2webots.importer --input=urdf/robot_6dof.urdf --output=webots_project/protos/robot_6dof.proto

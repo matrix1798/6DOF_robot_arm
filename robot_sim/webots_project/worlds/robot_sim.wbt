@@ -1,0 +1,34 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "../protos/robot_6dof.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation 0.06323071389377749 -0.08986832844827447 -0.9939444453098957 4.573727730413916
+  position 0.040327631674074965 -0.3933026037213541 0.17259667536795176
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+robot_6dof {
+  hidden translation_1 6.647869057613016e-07 6.325654508174388e-09 -0.0004281173161451504
+  hidden rotation_1 0.016446157313210814 0.9998647513334377 5.431898501014567e-05 8.838029906265079e-06
+  hidden position_1_0 -6.715704102314916e-06
+  hidden rotation_2 0 0 -1 6.715713809714872e-06
+  hidden position_2_0 0.6108610999198252
+  hidden rotation_3 0 1 0 0.9599349000210436
+  hidden position_3_0 -3.141595051838919
+  hidden rotation_4 0 1 0 1.5707990518758828
+  hidden position_4_0 1.34457246223258e-06
+  hidden rotation_5 0 0 1 1.3444117985534873e-06
+  hidden position_5_0 -5.245394512071751e-07
+  hidden rotation_6 0 0.9999999999999999 0 5.247240323322731e-07
+  hidden position_6_0 -8.056837466772171e-13
+  controller "my_controler"
+  supervisor TRUE
+  selfCollision TRUE
+}
